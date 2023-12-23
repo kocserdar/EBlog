@@ -6,4 +6,25 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.1.39" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.25" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\DTOs\" />
+    <Folder Include="Models\VMs\" />
+    <Folder Include="Services\AppUserServices\" />
+    <Folder Include="Services\ArticleServices\" />
+    <Folder Include="Services\GenreServices\" />
+    <Folder Include="Services\CommentServices\" />
+    <Folder Include="Services\LikeServices\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EBlog.Repo\EBlog.Repo.csproj" />
+  </ItemGroup>
+
 </Project>

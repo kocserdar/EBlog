@@ -1,4 +1,6 @@
 ﻿using EBlog.Core.Entities;
+using EBlog.Core.Enums;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
@@ -17,6 +19,9 @@ namespace EBlog.Repo.Configurations
             builder.Property(e => e.FirstName).IsRequired(false);
             builder.Property(e => e.LastName).IsRequired(false);
             builder.Property(e => e.ImagePath).IsRequired(false);
+            
+            //Created Time
+            builder.Property(e => e.CreatedAt).HasDefaultValue(DateTime.Now);
 
             base.Configure(builder);
         }

@@ -1,5 +1,6 @@
 ﻿using EBlog.Service.Models.DTOs.AppUser;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace EBlog.Service.Services.AppUserServices
         Task LogOut();
         Task<UpdateProfileDTO> GetById(string id);
         Task UpdateUser(UpdateProfileDTO model);
+
+        Task<IdentityResult> CreateRole(CreateRoleDTO model);
 
     }
 }

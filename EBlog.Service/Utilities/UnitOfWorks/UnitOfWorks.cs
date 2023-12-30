@@ -13,10 +13,10 @@ namespace EBlog.Service.Utilities.UnitOfWorks
         public UnitOfWorks(IMapper mapper)
         {
             Mapper = mapper;
-
         }
 
         public IMapper Mapper { get;}
+
 
     }
 }

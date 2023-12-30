@@ -1,31 +1,26 @@
-﻿using EBlog.Core.Enums;
-using EBlog.Core.Interfaces;
-using Microsoft.AspNetCore.Identity;
+﻿using EBlog.Core.Entities;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EBlog.Core.Entities
+namespace EBlog.Service.Models.VMs
 {
-    public class AppUser:IdentityUser, IBaseEntity
+    public class ProfilePageVM
     {
+        public string Id { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? ImagePath { get; set; }
+        public string? Email { get; set;}
+        public string? UserName { get; set; }
+        public string? PhoneNumber { get; set; }
+        public string? FullName { get; set; }
 
-        //Implement
-        public DateTime CreatedAt { get; set; }
-        public DateTime? UpdatedAt { get; set; }
-        public DateTime? PassivedAt { get; set; }
-        public Status Status { get; set; } = Status.Active;
-
-        //Navigation
         public virtual List<Article> Articles { get; set; }
         public virtual List<Comment> Comments { get; set; }
         public virtual List<Like> Likes { get; set; }
-
-
     }
 }

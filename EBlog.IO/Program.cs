@@ -1,9 +1,11 @@
+using EBlog.Core.Entities;
 using EBlog.Repo.Concretes;
 using EBlog.Repo.Contexts;
 using EBlog.Repo.Interfaces;
 using EBlog.Service.Mapping;
 using EBlog.Service.Services.AppUserServices;
 using EBlog.Service.Utilities.UnitOfWorks;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,19 @@ builder.Services.AddDbContext<AppDbContext>();
 //Mapping
 builder.Services.AddAutoMapper(typeof(Mapping));
 
+//Identity Service
+builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+{
+    options.User.RequireUniqueEmail = true;
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 3;
+})
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+
 //Repos
 builder.Services.AddScoped<IAppUserRepo, AppUserRepo>();
 builder.Services.AddScoped<IGenreRepo, GenreRepo>();
@@ -24,7 +39,7 @@ builder.Services.AddScoped<ILikeRepo, LikeRepo>();
 builder.Services.AddScoped<IArticleRepo, ArticleRepo>();
 
 //Services
-
+builder.Services.AddScoped<IAppUserService, AppUserService>();
 
 //UnitOfWorks
 builder.Services.AddTransient<IUnitOfWorks, UnitOfWorks>();
@@ -44,6 +59,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

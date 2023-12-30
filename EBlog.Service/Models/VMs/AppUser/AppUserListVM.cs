@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace EBlog.Service.Models.VMs.AppUser
 {
-    public class RegisterVM
+    public class AppUserListVM
     {
+        public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
+
     }
 }

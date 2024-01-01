@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EBlog.Core.Entities;
 using EBlog.Service.Models.DTOs.AppUser;
+using EBlog.Service.Models.DTOs.Article;
 using EBlog.Service.Models.DTOs.Genre;
 using EBlog.Service.Models.VMs.AppUser;
 using EBlog.Service.Models.VMs.Genre;
@@ -28,6 +29,8 @@ namespace EBlog.Service.Mapping
 
             CreateMap<Genre, CreateGenreDTO>().ReverseMap();
             CreateMap<Genre, GetGenreVM>().ReverseMap();   
+
+            CreateMap<Article, CreateArticleDTO>().ReverseMap();
 
         }
     }

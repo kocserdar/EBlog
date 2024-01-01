@@ -1,0 +1,77 @@
+﻿@using EBlog.Service.Models.VMs.Article
+@model GetArticleDetailVM
+@{
+    ViewData["Title"] = "LetRead";
+}
+
+<h1>LetRead</h1>
+
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h5 class="card-title">@Html.DisplayFor(model=>model.Title)</h5>
+        <p class="card-text">@Html.DisplayFor(model => model.Content)</p>
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+    </div>
+</div>
+
+
+User will read article on this page
+
+<div class="container">
+    <table class="table">
+        <thead>
+        <th>
+                @Html.DisplayNameFor(model => model.Id)
+        </th>
+        <th>
+                @Html.DisplayNameFor(model => model.AuthorFullName)
+        </th>
+        <th>
+                @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+                @Html.DisplayNameFor(model => model.Content)
+        </th>
+        <th>
+                @Html.DisplayNameFor(model => model.CommentCount)
+        </th>
+        <th>
+                @Html.DisplayNameFor(model => model.LikeCount)
+        </th>
+        <th>
+                @Html.DisplayNameFor(model => model.CreateDate)
+        </th>
+        <th>
+                @Html.DisplayNameFor(model => model.GenreId)
+        </th>
+        </thead>
+        <tbody>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(Model => Model.Id)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(Model => Model.AuthorFullName)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(Model => Model.Title)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(Model => Model.Content)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(Model => Model.CommentCount)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(Model => Model.LikeCount)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(Model => Model.CreateDate)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(Model => Model.GenreId)
+                    </td>
+                </tr>
+        </tbody>
+    </table>
+</div>

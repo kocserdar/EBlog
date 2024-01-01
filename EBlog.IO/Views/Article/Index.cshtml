@@ -1,0 +1,72 @@
+﻿@using EBlog.Service.Models.VMs.Article
+@model IEnumerable<GetArticleVM>
+@{
+    ViewData["Title"] = "View";
+}
+
+<h1>View</h1>
+
+<h3>This view will be Article List page</h3>
+
+<div class="container">
+    <table class="table">
+        <thead>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AuthorFullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Content)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CommentCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LikeCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreateDate)
+            </th>
+        <th>
+                @Html.DisplayNameFor(model => model.GenreId)
+        </th>
+        </thead>
+        <tbody>
+            @foreach(var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.AuthorFullName)
+                    </td>
+                    <td onclick="location.href = '@Url.Action("LetRead","Article",new {id = item.Id})'">
+                        @Html.DisplayFor(modelitem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.Content)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.CommentCount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.LikeCount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.CreateDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.GenreId)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

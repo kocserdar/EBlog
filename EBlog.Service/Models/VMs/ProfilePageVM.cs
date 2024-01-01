@@ -19,8 +19,8 @@ namespace EBlog.Service.Models.VMs
         public string? PhoneNumber { get; set; }
         public string? FullName { get; set; }
 
-        public virtual List<Article> Articles { get; set; }
-        public virtual List<Comment> Comments { get; set; }
+        public virtual List<EBlog.Core.Entities.Article> Articles { get; set; }
+        public virtual List<EBlog.Core.Entities.Comment> Comments { get; set; }
         public virtual List<Like> Likes { get; set; }
     }
 }

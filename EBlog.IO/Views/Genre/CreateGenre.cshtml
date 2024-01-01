@@ -1,14 +1,14 @@
-﻿@model EBlog.Service.Models.DTOs.AppUser.CreateRoleDTO
+﻿@model EBlog.Service.Models.DTOs.Genre.CreateGenreDTO
 
 @{
-    ViewData["Title"] = "CreateRole";
+    ViewData["Title"] = "CreateGenre";
 }
 
-<h4>Create Role</h4>
+<h4>Create Genre</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CreateRole">
+        <form asp-action="CreateGenre">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -27,8 +27,3 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}

@@ -4,6 +4,7 @@ using EBlog.Repo.Contexts;
 using EBlog.Repo.Interfaces;
 using EBlog.Service.Mapping;
 using EBlog.Service.Services.AppUserServices;
+using EBlog.Service.Services.GenreServices;
 using EBlog.Service.Utilities.UnitOfWorks;
 using Microsoft.AspNetCore.Identity;
 
@@ -40,6 +41,7 @@ builder.Services.AddScoped<IArticleRepo, ArticleRepo>();
 
 //Services
 builder.Services.AddScoped<IAppUserService, AppUserService>();
+builder.Services.AddScoped<IGenreServices, GenreServices>();
 
 //UnitOfWorks
 builder.Services.AddTransient<IUnitOfWorks, UnitOfWorks>();

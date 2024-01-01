@@ -14,13 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\DTOs\Genre\" />
     <Folder Include="Models\DTOs\Common\" />
     <Folder Include="Models\DTOs\Like\" />
     <Folder Include="Models\DTOs\Comment\" />
     <Folder Include="Models\DTOs\Article\" />
     <Folder Include="Services\ArticleServices\" />
-    <Folder Include="Services\GenreServices\" />
     <Folder Include="Services\CommentServices\" />
     <Folder Include="Services\LikeServices\" />
     <Folder Include="Utilities\Exceptions\" />

@@ -64,7 +64,9 @@ namespace EBlog.Service.Services.AppUserServices
             user.Email = model.UserName;
             user.CreatedAt = DateTime.Now;
 
+
             var result = await _userManager.CreateAsync(user);
+            await _userManager.AddToRoleAsync(user, "Normal");
 
             if (result.Succeeded)
             {

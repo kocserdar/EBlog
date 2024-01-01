@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using EBlog.Core.Entities;
 using EBlog.Service.Models.DTOs.AppUser;
+using EBlog.Service.Models.DTOs.Genre;
 using EBlog.Service.Models.VMs.AppUser;
+using EBlog.Service.Models.VMs.Genre;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -24,6 +26,8 @@ namespace EBlog.Service.Mapping
             CreateMap<IdentityRole, CreateRoleDTO>().ReverseMap();
             CreateMap<IdentityRole, CreateRoleVM>().ReverseMap();
 
+            CreateMap<Genre, CreateGenreDTO>().ReverseMap();
+            CreateMap<Genre, GetGenreVM>().ReverseMap();   
 
         }
     }

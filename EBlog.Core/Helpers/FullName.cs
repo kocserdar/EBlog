@@ -10,7 +10,7 @@ namespace EBlog.Core.Helpers
     {
         public static string GetFullName(string firstname, string lastname)
         {
-            return firstname.First().ToString().ToUpper() +" "+ lastname;
+            return firstname.First().ToString().ToUpper() +". "+ lastname;
         }
     }
 }

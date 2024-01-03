@@ -6,7 +6,9 @@ using EBlog.Service.Models.VMs.Comment;
 using EBlog.Service.Utilities.UnitOfWorks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
+using EBlog.Core.Helpers;
 
 namespace EBlog.Service.Services.ArticleServices
 {
@@ -30,9 +32,12 @@ namespace EBlog.Service.Services.ArticleServices
 
         }
 
-        public Task Delete(int id)
+        public async Task Delete(int id)
         {
-            throw new NotImplementedException();
+            var article = await _articleRepo.GetById(id);
+            article.Status = Core.Enums.Status.Passive;
+            article.PassivedAt = DateTime.Now;
+            _articleRepo.Delete(article);
         }
 
         public async Task<GetArticleDetailVM> GetArticleDetail(int id)
@@ -43,11 +48,12 @@ namespace EBlog.Service.Services.ArticleServices
                     Id = x.Id,
                     Title = x.Title,
                     Content = x.Content,
-                    AuthorFullName = x.AppUser.FirstName + " " + x.AppUser.LastName,
+                    AuthorFullName =  x.AppUser.FirstName + " " + x.AppUser.LastName, //EBlog.Core.Helpers.FullName.GetFullName(x.AppUser.FirstName,x.AppUser.LastName),
                     CommentCount = x.Comments.Count,
                     LikeCount = x.Likes.Count,
                     CreateDate = x.CreatedAt,
                     GenreId = x.GenreId,
+                    GenreName = x.Genre.Name,
                     CommentList = x.Comments.Where(x => x.Id == id)
                                                     .OrderByDescending(x => x.CreatedAt)
                                                     .Select(x => new GetCommentVM
@@ -60,7 +66,7 @@ namespace EBlog.Service.Services.ArticleServices
 
                 },
                 where: x => x.Status != Core.Enums.Status.Passive && x.Id == id,
-                join: x => x.Include(x => x.AppUser).Include(x => x.Comments).Include(x => x.Likes));
+                join: x => x.Include(x => x.AppUser).Include(x => x.Comments).Include(x => x.Likes).Include(x=>x.Genre));
                 return article;
         }
 
@@ -90,5 +96,6 @@ namespace EBlog.Service.Services.ArticleServices
         {
             throw new NotImplementedException();
         }
+
     }
 }

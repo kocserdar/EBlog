@@ -1,0 +1,34 @@
+﻿@using EBlog.Service.Models.VMs.Article
+@model GetArticleDetailVM
+@{
+    ViewData["Title"] = "Edit your article";
+}
+
+
+<h5><b>@Html.DisplayFor(model => model.Title)</b></h5>
+<hr />
+<a><b>Like</b></a>
+<a>@Model.LikeCount </a>
+<b> | </b> 
+<a><b>Comment</b></a>
+<a>@Model.CommentCount</a>
+<b> | </b>
+<a>@Model.CreateDate.Date.ToString().Substring(0, 10)</a>
+<b> | </b>
+<a>@Model.AuthorFullName</a>
+<b> | </b>
+<a>@Model.GenreName</a>
+<hr />
+
+<div id="summernote">@Model.Content</div>
+
+
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#summernote').summernote();
+        });
+    </script>
+}

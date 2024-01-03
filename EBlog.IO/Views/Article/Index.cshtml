@@ -46,7 +46,7 @@
                     <td>
                         @Html.DisplayFor(modelitem => item.AuthorFullName)
                     </td>
-                    <td onclick="location.href = '@Url.Action("LetRead","Article",new {id = item.Id})'">
+                    <td onclick="location.href = '@Url.Action("Read","Article",new {id = item.Id})'">
                         @Html.DisplayFor(modelitem => item.Title)
                     </td>
                     <td>

@@ -1,0 +1,24 @@
+﻿@using EBlog.Service.Models.VMs.Article
+@model GetArticleDetailVM
+
+@{
+    ViewData["Title"] = "Read Article";
+}
+
+<div>
+    <h2>
+        <b>@Html.DisplayFor(model => model.Title)</b>
+    </h2>
+</div>
+@if (User.IsInRole("Admin"))
+{
+<a onclick="location.href = '@Url.Action("Edit","Article",new {id = Model.Id})'">Edit your article</a>
+<a> | </a>
+}
+
+
+<div>
+    <h4>
+        <p style="text-align:justify">@Html.DisplayFor(model => model.Content)</p>
+    </h4>
+</div>

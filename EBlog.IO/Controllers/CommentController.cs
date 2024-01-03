@@ -2,7 +2,7 @@
 
 namespace EBlog.IO.Controllers
 {
-    public class AdminController : Controller
+    public class CommentController : Controller
     {
         public IActionResult Index()
         {

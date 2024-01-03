@@ -2,11 +2,12 @@
 
 namespace EBlog.IO.Controllers
 {
-    public class AdminController : Controller
+    public class LikeController : Controller
     {
         public IActionResult Index()
         {
             return View();
         }
+
     }
 }

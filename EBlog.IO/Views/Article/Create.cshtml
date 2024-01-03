@@ -16,7 +16,7 @@
                 <label asp-for="GenreId"></label>
                 <select asp-items="@(new SelectList(Model.Genres,"Id","Name"))" asp-for="GenreId"></select>
             </div>            
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <label asp-for="AppUserId" class="control-label"></label>
                 <input asp-for="AppUserId" class="form-control" />
                 <span asp-validation-for="AppUserId" class="text-danger"></span>

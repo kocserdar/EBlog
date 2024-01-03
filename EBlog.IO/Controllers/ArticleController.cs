@@ -50,10 +50,27 @@ namespace EBlog.IO.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> LetRead(int id)
+        public async Task<IActionResult> Read(int id)
         {
             var article = await _articleServices.GetArticleDetail(id);
             return View(article);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _articleServices.Delete(id);
+            //return RedirectToAction($"/articles/{id}");
+            return RedirectToAction("Index","Article");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var article = await _articleServices.GetArticleDetail(id);
+            return View(article);
+            //return RedirectToAction($"/articles/{id}");
+            return RedirectToAction("Index", "Article");
         }
 
     }

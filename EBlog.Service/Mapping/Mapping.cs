@@ -31,6 +31,7 @@ namespace EBlog.Service.Mapping
             CreateMap<Genre, GetGenreVM>().ReverseMap();   
 
             CreateMap<Article, CreateArticleDTO>().ReverseMap();
+            CreateMap<Article, EditArticleDTO>().ReverseMap();
 
         }
     }

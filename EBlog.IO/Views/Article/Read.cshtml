@@ -10,15 +10,24 @@
         <b>@Html.DisplayFor(model => model.Title)</b>
     </h2>
 </div>
+<hr />
 @if (User.IsInRole("Admin"))
 {
-<a onclick="location.href = '@Url.Action("Edit","Article",new {id = Model.Id})'">Edit your article</a>
+    <span style="cursor:pointer">
+        <a onclick="location.href = '@Url.Action("Edit","Article",new {id = Model.Id})'">Edit your article</a>
+    </span>
+
 <a> | </a>
 }
-
+<hr />
 
 <div>
-    <h4>
-        <p style="text-align:justify">@Html.DisplayFor(model => model.Content)</p>
-    </h4>
+        <span>
+            @* <p style="text-align:justify">@Html.DisplayFor(model => model.Content)</p> *@
+            <p style="text-align:justify">@Html.Raw(Model.Content)</p>
+        </span>
 </div>
+<hr />
+
+
+@* ; text-decoration: underline; *@

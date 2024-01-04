@@ -1,34 +1,63 @@
-﻿@using EBlog.Service.Models.VMs.Article
-@model GetArticleDetailVM
+﻿@using EBlog.Service.Models.DTOs.Article
+@model EditArticleDTO
 @{
     ViewData["Title"] = "Edit your article";
 }
 
+<div class="col-md-12">
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @*         <div class="input-group mb-3">
+        <input type="file" class="form-control" id="inputGroupFile02">
+        <label class="input-group-text" for="inputGroupFile02">Upload</label>
+        </div> *@
+        <div class="form-group input-group mb-3">
+            <label asp-for="GenreId" class="input-group-text">Choose Genre</label>
+            <select asp-items="@(new SelectList(Model.Genres,"Id","Name"))" asp-for="GenreId" class="form-select"></select>
+        </div>
+        <div class="form-group" hidden>
+            <label asp-for="AppUserId" class="control-label"></label>
+            <input asp-for="AppUserId" class="form-control" />
+            <span asp-validation-for="AppUserId" class="text-danger"></span>
+        </div>
+        <div class="form-group" hidden>
+            <label asp-for="ID" class="control-label"></label>
+            <input asp-for="ID" class="form-control" />
+            <span asp-validation-for="ID" class="text-danger"></span>
+        </div>
+        <div class="form-group input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default" style="width:125px">Enter Title</span>
+            <input asp-for=Title type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="form-group" hidden>
+            <label asp-for="Content" class="control-label"></label>
+            <input asp-for="Content" class="form-control" id="summernoteContent" />
+            <span asp-validation-for="Content" class="text-danger"></span>
+        </div>
 
-<h5><b>@Html.DisplayFor(model => model.Title)</b></h5>
-<hr />
-<a><b>Like</b></a>
-<a>@Model.LikeCount </a>
-<b> | </b> 
-<a><b>Comment</b></a>
-<a>@Model.CommentCount</a>
-<b> | </b>
-<a>@Model.CreateDate.Date.ToString().Substring(0, 10)</a>
-<b> | </b>
-<a>@Model.AuthorFullName</a>
-<b> | </b>
-<a>@Model.GenreName</a>
-<hr />
+        <div id="summernote">
+        </div>
+        <br />
+        <div class="form-group">
+            <input type="submit" value="Edit" class="btn btn-secondary" />
+        </div>
 
-<div id="summernote">@Model.Content</div>
-
-
+    </form>
+</div>
+<div class="alert">
+    @TempData["ArticleEditMessage"]
+</div>
 
 @section Scripts {
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('#summernote').summernote();
+            var ModelContent = '@Html.Raw(Model.Content)'
+            $('#summernote').summernote('code', ModelContent);
+        });
+        $('form').submit(function () {
+            var summernoteContent = $('#summernote').summernote('code');
+            $('#summernoteContent').val(summernoteContent);
         });
     </script>
 }

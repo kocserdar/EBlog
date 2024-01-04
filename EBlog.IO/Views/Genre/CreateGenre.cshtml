@@ -6,22 +6,29 @@
 
 <h4>Create Genre</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="CreateGenre">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+<div class="col-md-6">
+    <form asp-action="CreateGenre">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @*             <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+        </div> *@
+        <div class="form-group input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default"><b>Genre Name</b></span>
+            <input asp-for=Name type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-secondary" />
+        </div>
+        <div>
+            <input type="submit" asp-action="Index" asp-controller="Genre" value="Back to List" class="btn btn-secondary" />
+        </div>
+    </form>
 </div>
+
 
 <div>
     <a asp-action="Index">Back to List</a>

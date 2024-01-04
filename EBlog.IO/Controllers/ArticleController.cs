@@ -67,10 +67,26 @@ namespace EBlog.IO.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var article = await _articleServices.GetArticleDetail(id);
+            var article = await _articleServices.GetArticle(id);
+            var getGenreVMs = await _genreServices.GetAllGenres();
+            article.Genres = getGenreVMs;
+            article.AppUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return View(article);
             //return RedirectToAction($"/articles/{id}");
             return RedirectToAction("Index", "Article");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditArticleDTO model)
+        {
+            if (ModelState.IsValid)
+            {
+                 _articleServices.Update(model);
+                TempData["ArticleEditMessage"] = "Success";
+            }
+                var getGenreVMs = await _genreServices.GetAllGenres();
+                model.Genres = getGenreVMs;
+                return View(model);
         }
 
     }

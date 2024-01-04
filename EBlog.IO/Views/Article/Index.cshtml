@@ -39,18 +39,20 @@
         <tbody>
             @foreach(var item in Model)
             {
-                <tr>
+                <tr style="cursor:pointer" onclick="location.href = '@Url.Action("Read","Article",new {id = item.Id})'">
                     <td>
                         @Html.DisplayFor(modelitem => item.Id)
                     </td>
                     <td>
                         @Html.DisplayFor(modelitem => item.AuthorFullName)
                     </td>
-                    <td onclick="location.href = '@Url.Action("Read","Article",new {id = item.Id})'">
-                        @Html.DisplayFor(modelitem => item.Title)
-                    </td>
                     <td>
-                        @Html.DisplayFor(modelitem => item.Content)
+                            @Html.DisplayFor(modelitem => item.Title)
+                    </td>
+
+                    <td>
+                        <span class="d-inline-block text-truncate" style="max-width: 250px; max-height:25px">@Html.Raw(item.Content)</span>
+
                     </td>
                     <td>
                         @Html.DisplayFor(modelitem => item.CommentCount)
@@ -70,3 +72,14 @@
     </table>
 </div>
 
+@* <!-- Block level -->
+<div class="row">
+    <div class="col-2 text-truncate">
+        This text is quite long, and will be truncated once displayed.
+    </div>
+</div>
+
+<!-- Inline level -->
+<span class="d-inline-block text-truncate" style="max-width: 150px;">
+    This text is quite long, and will be truncated once displayed.
+</span> *@

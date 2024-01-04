@@ -12,7 +12,7 @@ namespace EBlog.Service.Services.ArticleServices
     {
         Task Create(CreateArticleDTO model);
         
-        void Update(CreateArticleDTO model);
+        void Update(EditArticleDTO model);
 
         Task Delete(int id);
 
@@ -20,5 +20,6 @@ namespace EBlog.Service.Services.ArticleServices
         
         Task<GetArticleDetailVM> GetArticleDetail(int id);
 
+        Task<EditArticleDTO> GetArticle(int id);
     }
 }

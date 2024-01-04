@@ -92,10 +92,21 @@ namespace EBlog.Service.Services.ArticleServices
                 
         }
 
-        public void Update(CreateArticleDTO model)
+        public void Update(EditArticleDTO model)
         {
-            throw new NotImplementedException();
+            if (model != null)
+            {
+                var article = _unitOfWorks.Mapper.Map<Article>(model);
+                article.UpdatedAt= DateTime.Now;
+                article.Status = Core.Enums.Status.Updated;
+                _articleRepo.Update(article);
+            }
         }
 
+        public async Task<EditArticleDTO> GetArticle(int id)
+        {
+            var article = await _articleRepo.GetById(id);
+            return _unitOfWorks.Mapper.Map<EditArticleDTO>(article);
+        }
     }
 }

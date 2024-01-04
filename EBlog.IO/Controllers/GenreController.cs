@@ -3,6 +3,7 @@ using EBlog.Service.Models.DTOs.Genre;
 using EBlog.Service.Models.VMs.Genre;
 using EBlog.Service.Services.GenreServices;
 using EBlog.Service.Utilities.UnitOfWorks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EBlog.IO.Controllers

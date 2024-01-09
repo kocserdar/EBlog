@@ -1,4 +1,5 @@
 ﻿using EBlog.Service.Models.VMs.Comment;
+using EBlog.Service.Models.VMs.Like;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,10 @@ namespace EBlog.Service.Models.VMs.Article
         public string AuthorFullName { get; set; }
         public int LikeCount { get; set; }
         public int CommentCount { get; set; }
+        public bool? IsLiked { get; set; }
 
-        public List<GetCommentVM> CommentList { get; set; }
+        public List<GetCommentVM>? CommentList { get; set; }
+
+        public List<GetLikeVM>? LikeList { get; set; }
     }
 }

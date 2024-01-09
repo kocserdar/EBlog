@@ -16,16 +16,29 @@
     <span style="cursor:pointer">
         <a onclick="location.href = '@Url.Action("Edit","Article",new {id = Model.Id})'">Edit your article</a>
     </span>
+}
+<a> | </a>
+
+<span style="cursor:pointer">
+    <a onclick="location.href = '@Url.Action("Create","Like",new {id = Model.Id})'">Like</a>
+    <a>@Html.DisplayFor(model => model.LikeCount)</a>
+</span>
 
 <a> | </a>
-}
+
+<span style="cursor:pointer">
+    <a onclick="location.href = '@Url.Action("Edit","Article",new {id = Model.Id})'">Comment</a>
+    <a>@Html.DisplayFor(model => model.CommentCount)</a>
+</span>
+
+<a> | </a>
 <hr />
 
 <div>
-        <span>
-            @* <p style="text-align:justify">@Html.DisplayFor(model => model.Content)</p> *@
-            <p style="text-align:justify">@Html.Raw(Model.Content)</p>
-        </span>
+    <span>
+        @* <p style="text-align:justify">@Html.DisplayFor(model => model.Content)</p> *@
+        <p style="text-align:justify">@Html.Raw(Model.Content)</p>
+    </span>
 </div>
 <hr />
 

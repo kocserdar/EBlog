@@ -21,6 +21,6 @@ namespace EBlog.Service.Models.VMs
 
         public virtual List<EBlog.Core.Entities.Article> Articles { get; set; }
         public virtual List<EBlog.Core.Entities.Comment> Comments { get; set; }
-        public virtual List<Like> Likes { get; set; }
+        public virtual List<EBlog.Core.Entities.Like> Likes { get; set; }
     }
 }

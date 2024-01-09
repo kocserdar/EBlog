@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using EBlog.Service.Services.AppUserServices;
+using EBlog.Service.Services.ArticleServices;
+using EBlog.Service.Services.GenreServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using EBlog.Core.Helpers;
+using System.Security.Cryptography.X509Certificates;
 
 namespace EBlog.Service.Services.ArticleServices
 {
@@ -48,26 +49,36 @@ namespace EBlog.Service.Services.ArticleServices
                     Id = x.Id,
                     Title = x.Title,
                     Content = x.Content,
-                    AuthorFullName =  x.AppUser.FirstName + " " + x.AppUser.LastName, //EBlog.Core.Helpers.FullName.GetFullName(x.AppUser.FirstName,x.AppUser.LastName),
-                    CommentCount = x.Comments.Count,
+                    AuthorFullName = x.AppUser.FirstName + " " + x.AppUser.LastName, //EBlog.Core.Helpers.FullName.GetFullName(x.AppUser.FirstName,x.AppUser.LastName),
+                    CommentCount = x.Comments.Count, //.Where(x => x.Id == id).ToList()
                     LikeCount = x.Likes.Count,
                     CreateDate = x.CreatedAt,
                     GenreId = x.GenreId,
                     GenreName = x.Genre.Name,
-                    CommentList = x.Comments.Where(x => x.Id == id)
+                    LikeList = x.Likes.Where(x => x.ArticleId == id)
+                                                    .Select(x => new Models.VMs.Like.GetLikeVM
+                                                    {
+                                                        Id = x.Id,
+                                                        AppUserId = x.AppUser.Id,
+                                                        ArticleId = x.ArticleId,
+                                                        Status = x.Status
+                                                    })
+                                                    .Where(y => y.Status != Core.Enums.Status.Passive)
+                                                    .ToList(),
+                    CommentList = x.Comments.Where(x => x.ArticleId == id)
                                                     .OrderByDescending(x => x.CreatedAt)
                                                     .Select(x => new GetCommentVM
                                                     {
                                                         Id = x.Id,
                                                         Text = x.Text,
                                                         CreateDate = x.CreatedAt,
-                                                        UserName = x.AppUser.UserName
+                                                        UserName = x.AppUser.UserName  //x.AppUser.UserName
                                                     }).ToList()
 
                 },
-                where: x => x.Status != Core.Enums.Status.Passive && x.Id == id,
-                join: x => x.Include(x => x.AppUser).Include(x => x.Comments).Include(x => x.Likes).Include(x=>x.Genre));
-                return article;
+                where: x => x.Id == id && x.Status != Core.Enums.Status.Passive,
+                join: x => x.Include(x => x.AppUser).Include(x => x.Comments).Include(x => x.Likes).Include(x => x.Genre));
+            return article;
         }
 
         public async Task<List<GetArticleVM>> GetArticles()
@@ -87,9 +98,9 @@ namespace EBlog.Service.Services.ArticleServices
                 },
                 where: x => x.Status != Core.Enums.Status.Passive,
                 orderBy: x => x.OrderByDescending(x => x.CreatedAt),
-                join: x => x.Include(x => x.AppUser).Include(x=> x.Likes).Include(x=>x.Comments));
+                join: x => x.Include(x => x.AppUser).Include(x => x.Likes).Include(x => x.Comments));
             return articles;
-                
+
         }
 
         public void Update(EditArticleDTO model)
@@ -97,7 +108,7 @@ namespace EBlog.Service.Services.ArticleServices
             if (model != null)
             {
                 var article = _unitOfWorks.Mapper.Map<Article>(model);
-                article.UpdatedAt= DateTime.Now;
+                article.UpdatedAt = DateTime.Now;
                 article.Status = Core.Enums.Status.Updated;
                 _articleRepo.Update(article);
             }

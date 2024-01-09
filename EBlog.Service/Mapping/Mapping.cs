@@ -3,6 +3,7 @@ using EBlog.Core.Entities;
 using EBlog.Service.Models.DTOs.AppUser;
 using EBlog.Service.Models.DTOs.Article;
 using EBlog.Service.Models.DTOs.Genre;
+using EBlog.Service.Models.DTOs.Like;
 using EBlog.Service.Models.VMs.AppUser;
 using EBlog.Service.Models.VMs.Genre;
 using Microsoft.AspNetCore.Identity;
@@ -32,6 +33,8 @@ namespace EBlog.Service.Mapping
 
             CreateMap<Article, CreateArticleDTO>().ReverseMap();
             CreateMap<Article, EditArticleDTO>().ReverseMap();
+
+            CreateMap<Like, CreateLikeDTO>().ReverseMap();
 
         }
     }

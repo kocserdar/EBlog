@@ -4,6 +4,7 @@ using EBlog.Service.Services.ArticleServices;
 using EBlog.Service.Services.GenreServices;
 using EBlog.Service.Utilities.UnitOfWorks;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Security.Claims;
 
 namespace EBlog.IO.Controllers
@@ -53,6 +54,7 @@ namespace EBlog.IO.Controllers
         public async Task<IActionResult> Read(int id)
         {
             var article = await _articleServices.GetArticleDetail(id);
+            article.IsLiked = article.LikeList.Where(x=>x.ArticleId == id).Select(x => x.AppUserId).ToList().Contains(User.FindFirstValue(ClaimTypes.NameIdentifier));
             return View(article);
         }
 

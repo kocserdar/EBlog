@@ -54,7 +54,9 @@ namespace EBlog.IO.Controllers
         public async Task<IActionResult> Read(int id)
         {
             var article = await _articleServices.GetArticleDetail(id);
-            article.IsLiked = article.LikeList.Where(x=>x.ArticleId == id).Select(x => x.AppUserId).ToList().Contains(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            article.IsLiked = article.LikeList.Where(x=>x.ArticleId == id && x.Status != Core.Enums.Status.Passive).Select(x => x.AppUserId).ToList().Contains(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            article.IsMine = article.AppUserId == User.FindFirstValue(ClaimTypes.NameIdentifier) ? true : false;
+
             return View(article);
         }
 

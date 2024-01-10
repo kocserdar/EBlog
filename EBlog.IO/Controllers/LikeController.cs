@@ -1,5 +1,7 @@
-﻿using EBlog.Service.Models.DTOs.Like;
+﻿using EBlog.Core.Entities;
+using EBlog.Service.Models.DTOs.Like;
 using EBlog.Service.Models.VMs.Article;
+using EBlog.Service.Models.VMs.Like;
 using EBlog.Service.Services.ArticleServices;
 using EBlog.Service.Services.LikeServices;
 using EBlog.Service.Utilities.UnitOfWorks;
@@ -39,6 +41,15 @@ namespace EBlog.IO.Controllers
                 await _likeServices.CreateLike(likeDTO);
 
                 return RedirectToAction("Read","Article",new {id = model.Id});
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int Id)
+        {
+            var article = await _articleServices.GetArticleDetail(Id);
+            GetLikeVM getLikeVM = article.LikeList.Where(x => x.ArticleId == Id && x.AppUserId == User.FindFirstValue(ClaimTypes.NameIdentifier)).First();
+            await _likeServices.DeleteLike(getLikeVM.Id); //
+            return RedirectToAction("Read", "Article", new { id = Id });
         }
     }
 }

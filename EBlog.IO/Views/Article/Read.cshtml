@@ -11,25 +11,50 @@
     </h2>
 </div>
 <hr />
-@if (User.IsInRole("Admin"))
+@if (Model.IsMine is true)
 {
     <span style="cursor:pointer">
         <a onclick="location.href = '@Url.Action("Edit","Article",new {id = Model.Id})'">Edit your article</a>
     </span>
+    <a> | </a>
 }
+
+
+@if (Model.IsLiked is true)
+{
+    <span style="cursor:pointer">
+        <a onclick="location.href ='@Url.Action("Delete","Like",new{ Id = Model.Id})'">
+            <img src="~/lib/img/Liked.png" style="width:20px" />
+            <a>@Html.DisplayFor(model => model.LikeCount)</a>
+        </a>
+    </span>
+}
+else
+{
+
+    <span style="cursor:pointer">
+        <a onclick="location.href ='@Url.Action("Create","Like",new{ id = Model.Id})'">
+            <img src="~/lib/img/Like.png" style="width:20px" />
+            <a>@Html.DisplayFor(model => model.LikeCount)</a>
+        </a>
+    </span>
+
+}
+
+
 <a> | </a>
 
 <span style="cursor:pointer">
-    <a onclick="location.href = '@Url.Action("Create","Like",new {id = Model.Id})'">Like</a>
-    <a>@Html.DisplayFor(model => model.LikeCount)</a>
+    <a onclick="location.href ='@Url.Action("Create","Like",new{ id = Model.Id})'">
+        <img src="~/lib/img/Comment.png" style="width:20px" />
+        <a>@Html.DisplayFor(model => model.CommentCount)</a>
+    </a>
 </span>
 
-<a> | </a>
-
-<span style="cursor:pointer">
-    <a onclick="location.href = '@Url.Action("Edit","Article",new {id = Model.Id})'">Comment</a>
+@* <span style="cursor:pointer">
+    <a onclick="location.href = '@Url.Action("Edit", "Article", new { id = Model.Id })'">Comment</a>
     <a>@Html.DisplayFor(model => model.CommentCount)</a>
-</span>
+</span> *@
 
 <a> | </a>
 <hr />

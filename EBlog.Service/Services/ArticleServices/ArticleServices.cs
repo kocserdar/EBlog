@@ -50,11 +50,12 @@ namespace EBlog.Service.Services.ArticleServices
                     Title = x.Title,
                     Content = x.Content,
                     AuthorFullName = x.AppUser.FirstName + " " + x.AppUser.LastName, //EBlog.Core.Helpers.FullName.GetFullName(x.AppUser.FirstName,x.AppUser.LastName),
-                    CommentCount = x.Comments.Count, //.Where(x => x.Id == id).ToList()
-                    LikeCount = x.Likes.Count,
+                    CommentCount = x.Comments.Where(x => x.Status != Core.Enums.Status.Passive).Count(), //.Where(x => x.Id == id).ToList()
+                    LikeCount = x.Likes.Where(x=>x.Status != Core.Enums.Status.Passive).Count(),
                     CreateDate = x.CreatedAt,
                     GenreId = x.GenreId,
                     GenreName = x.Genre.Name,
+                    AppUserId = x.AppUser.Id,
                     LikeList = x.Likes.Where(x => x.ArticleId == id)
                                                     .Select(x => new Models.VMs.Like.GetLikeVM
                                                     {
@@ -91,8 +92,8 @@ namespace EBlog.Service.Services.ArticleServices
                     Title = x.Title,
                     CreateDate = x.CreatedAt,
                     GenreId = x.GenreId,
-                    CommentCount = x.Comments.Count,
-                    LikeCount = x.Likes.Count,
+                    CommentCount = x.Comments.Where(x => x.Status != Core.Enums.Status.Passive).Count(),
+                    LikeCount = x.Likes.Where(x => x.Status != Core.Enums.Status.Passive).Count(),
                     AuthorFullName = x.AppUser.FirstName + " " + x.AppUser.LastName,
 
                 },

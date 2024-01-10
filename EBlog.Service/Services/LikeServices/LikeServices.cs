@@ -32,9 +32,12 @@ namespace EBlog.Service.Services.LikeServices
             //return Task.CompletedTask;
         }
 
-        public Task DeleteLike(int id)
+        public async Task DeleteLike(int id)
         {
-            throw new NotImplementedException();
+            var like = await _likeRepo.GetById(id);
+            like.Status = Core.Enums.Status.Passive;
+            like.PassivedAt = DateTime.Now;
+            _likeRepo.Delete(like);
         }
 
 

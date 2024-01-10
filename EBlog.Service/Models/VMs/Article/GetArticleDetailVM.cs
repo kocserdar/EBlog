@@ -20,6 +20,9 @@ namespace EBlog.Service.Models.VMs.Article
         public int LikeCount { get; set; }
         public int CommentCount { get; set; }
         public bool? IsLiked { get; set; }
+        public bool? IsMine { get; set; }
+
+        public string AppUserId { get; set; }
 
         public List<GetCommentVM>? CommentList { get; set; }
 

@@ -35,7 +35,7 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="UpdateUser">@User.Identity.Name</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="UpdateUser">@ViewData["UserName"]</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Logout">Logout</a>

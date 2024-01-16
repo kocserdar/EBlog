@@ -14,12 +14,11 @@ namespace EBlog.Service.Services.GenreServices
     public class GenreServices : IGenreServices
     {
         private readonly IUnitOfWorks _unitOfWorks;
-        private readonly IGenreRepo _genreRepo;
 
-        public GenreServices(IUnitOfWorks unitOfWorks, IGenreRepo genreRepo)
+        public GenreServices(IUnitOfWorks unitOfWorks)
         {
             _unitOfWorks = unitOfWorks;
-            _genreRepo = genreRepo;
+
         }
 
         public async Task CreateGenre(CreateGenreDTO model)
@@ -29,25 +28,25 @@ namespace EBlog.Service.Services.GenreServices
                 var genre = _unitOfWorks.Mapper.Map<Genre>(model);
                 genre.Status = Core.Enums.Status.Active;
                 genre.CreatedAt = DateTime.Now;
-                await _genreRepo.Create(genre);
+                await _unitOfWorks.GenreRepo.Create(genre);
 
             }
         }
 
         public async Task DeleteGenre(int id)
         {
-            var genre = await _genreRepo.GetById(id);
+            var genre = await _unitOfWorks.GenreRepo.GetById(id);
             if (genre != null) 
             {
                 genre.Status = Core.Enums.Status.Passive;
                 genre.PassivedAt = DateTime.Now;
-                _genreRepo.Delete(genre);
+                _unitOfWorks.GenreRepo.Delete(genre);
             }
         }
 
         public async Task<List<GetGenreVM>> GetAllGenres()
         {
-            var genres = await _genreRepo.GetFilteredList(
+            var genres = await _unitOfWorks.GenreRepo.GetFilteredList(
                 select: x => new GetGenreVM
                 {
                     Id = x.Id,
@@ -61,7 +60,7 @@ namespace EBlog.Service.Services.GenreServices
 
         public async Task<GetGenreVM> GetById(int id)
         {
-            var genre = await _genreRepo.GetById(id);
+            var genre = await _unitOfWorks.GenreRepo.GetById(id);
             return _unitOfWorks.Mapper.Map<GetGenreVM>(genre);
         }
 
@@ -70,7 +69,7 @@ namespace EBlog.Service.Services.GenreServices
             var genre = _unitOfWorks.Mapper.Map<Genre>(model);
             genre.Status = Core.Enums.Status.Updated;
             genre.UpdatedAt = DateTime.Now;
-            _genreRepo.Update(genre);
+            _unitOfWorks.GenreRepo.Update(genre);
         }
     }
 }

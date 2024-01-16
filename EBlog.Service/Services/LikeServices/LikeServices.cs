@@ -14,12 +14,12 @@ namespace EBlog.Service.Services.LikeServices
     public class LikeServices : ILikeServices
     {
         private readonly IUnitOfWorks _unitOfWorks;
-        private readonly ILikeRepo _likeRepo;
 
-        public LikeServices(IUnitOfWorks unitOfWorks, ILikeRepo likeRepo)
+
+        public LikeServices(IUnitOfWorks unitOfWorks)
         {
             _unitOfWorks = unitOfWorks;
-            _likeRepo = likeRepo;
+
         }
 
         public async Task CreateLike(CreateLikeDTO model)
@@ -27,17 +27,17 @@ namespace EBlog.Service.Services.LikeServices
             var like = _unitOfWorks.Mapper.Map<Like>(model);
             like.Status = Core.Enums.Status.Active;
             like.CreatedAt = DateTime.Now;
-            await _likeRepo.Create(like);
+            await _unitOfWorks.LikeRepo.Create(like);
             //return Task.FromResult(like);
             //return Task.CompletedTask;
         }
 
         public async Task DeleteLike(int id)
         {
-            var like = await _likeRepo.GetById(id);
+            var like = await _unitOfWorks.LikeRepo.GetById(id);
             like.Status = Core.Enums.Status.Passive;
             like.PassivedAt = DateTime.Now;
-            _likeRepo.Delete(like);
+            _unitOfWorks.LikeRepo.Delete(like);
         }
 
 

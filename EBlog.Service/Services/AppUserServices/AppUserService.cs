@@ -2,7 +2,9 @@
 using EBlog.Core.Enums;
 using EBlog.Repo.Interfaces;
 using EBlog.Service.Models.DTOs.AppUser;
+using EBlog.Service.Models.VMs.AppUser;
 using EBlog.Service.Utilities.UnitOfWorks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
@@ -15,32 +17,33 @@ namespace EBlog.Service.Services.AppUserServices
 {
     public class AppUserService : IAppUserService
     {
+
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IUnitOfWorks _unitOfWorks;
-        private readonly IAppUserRepo _appUserRepo;
         private readonly RoleManager<IdentityRole> _rolemanager;
+        private readonly IPasswordHasher<AppUser> _passwordHasher;
 
 
-        public AppUserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IUnitOfWorks unitOfWorks, IAppUserRepo appUserRepo, RoleManager<IdentityRole> rolemanager)
+        public AppUserService(UserManager<AppUser> userManager, IUnitOfWorks unitOfWorks, RoleManager<IdentityRole> rolemanager, IPasswordHasher<AppUser> passwordHasher, SignInManager<AppUser> signInManager)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
             _unitOfWorks = unitOfWorks;
-            _appUserRepo = appUserRepo;
             _rolemanager = rolemanager;
+            _passwordHasher = passwordHasher;
+            _signInManager = signInManager;
         }
 
         public async Task<UpdateProfileDTO> GetById(string id)
         {
-            var user = await _appUserRepo.GetDefault(x => x.Id == id);
+            var user = await _unitOfWorks.AppUserRepo.GetDefault(x => x.Id == id);
             var model = _unitOfWorks.Mapper.Map<UpdateProfileDTO>(user);
             return model;
         }
 
         public async Task<SignInResult> Login(LoginDTO model)
         {
-            var user = await _appUserRepo.GetDefault(x => x.UserName == model.UserName);
+            var user = await _unitOfWorks.AppUserRepo.GetDefault(x => x.UserName == model.UserName);
 
             if (user.Status == Status.Passive)
             {
@@ -75,33 +78,22 @@ namespace EBlog.Service.Services.AppUserServices
             return result;
         }
 
-        public async Task UpdateUser(UpdateProfileDTO model)
+        public async Task<IdentityResult> UpdateUser(UpdateProfileDTO model)
         {
-            if (model != null)
-            {
-                var user = _unitOfWorks.Mapper.Map<AppUser>(model);
-                user.UpdatedAt = DateTime.Now;
-                user.Email = model.UserName;
-                user.Status = Status.Updated;
-                //_appUserRepo.Update(user);
-                //await _userManager.UpdateAsync(user);
-                if (model.UserName != null)
-                {
-                    await _userManager.SetEmailAsync(user, model.UserName);
-                    await _userManager.SetUserNameAsync(user, model.UserName);
-                    await _signInManager.SignInAsync(user, false);
-                }
-                _appUserRepo.Update(user);
-            }
-            //if (model.Password != null)
-            //{
-            //    user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, model.Password);
-            //    await _userManager.UpdateAsync(user);
-            //}
+            var user = await _userManager.FindByIdAsync(model.Id);
+            user.Status = Status.Updated;
+            user.UpdatedAt = DateTime.Now;
+            user.Email = model.UserName;
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.UserName = model.UserName;
+            user.PhoneNumber = model.PhoneNumber;
+            user.ImagePath = model.ImagePath;
+            user.PasswordHash = _passwordHasher.HashPassword(user, model.Password);
+            var result = await _userManager.UpdateAsync(user);
+            return result;
 
         }
-
-
 
         public async Task<IdentityResult> CreateRole(CreateRoleDTO model)
         {
@@ -118,5 +110,35 @@ namespace EBlog.Service.Services.AppUserServices
 
             return IdentityResult.Failed();
         }
+
+
+
+
+
+        //public async Task<AppUser> GetAllUserInfo(string userId)
+        //{
+        //    /*EBlog.Core.Helpers.FullName.GetFullName(x.AppUser.FirstName,x.AppUser.LastName),*/
+        //    var user = await _appUserRepo.GetFilteredFirstOrDefault(
+        //        select: x => new ProfilePageVM
+        //        {
+        //            FirstName = x.FirstName,
+        //            LastName = x.LastName,
+        //            UserName = x.UserName,
+        //            ImagePath = x.ImagePath,
+        //            FullName = EBlog.Core.Helpers.FullName.GetFullName(x.FirstName, x.LastName),
+        //            PhoneNumber = x.PhoneNumber,
+        //            Articles = x.Articles.Where(x => x.AppUserId == userId)
+        //                                            .Select(x => new Models.VMs.Article.GetArticleVM
+        //                                            {
+        //                                                Content = x.Content,
+        //                                                CreateDate = x.CreatedAt,
+        //                                                Title = x.Title,
+        //                                                Id = x.Id
+        //                                            }
+        //                                            .ToList(),
+        //             Comments = 
+        //        }
+        //        );
+        //}
     }
 }

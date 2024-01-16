@@ -5,6 +5,7 @@ using EBlog.Repo.Interfaces;
 using EBlog.Service.Mapping;
 using EBlog.Service.Services.AppUserServices;
 using EBlog.Service.Services.ArticleServices;
+using EBlog.Service.Services.CommentServices;
 using EBlog.Service.Services.GenreServices;
 using EBlog.Service.Services.LikeServices;
 using EBlog.Service.Utilities.UnitOfWorks;
@@ -46,9 +47,10 @@ builder.Services.AddScoped<IAppUserService, AppUserService>();
 builder.Services.AddScoped<IGenreServices, GenreServices>();
 builder.Services.AddScoped<IArticleServices, ArticleServices>();
 builder.Services.AddScoped<ILikeServices, LikeServices>();
+builder.Services.AddScoped<ICommentServices, CommentServices>();
 
 //UnitOfWorks
-builder.Services.AddTransient<IUnitOfWorks, UnitOfWorks>();
+builder.Services.AddScoped<IUnitOfWorks, UnitOfWorks>();
 
 var app = builder.Build();
 

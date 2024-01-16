@@ -35,7 +35,7 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="UpdateUser">@ViewData["UserName"]</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="ProfilePage">@ViewData["UserName"]</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Logout">Logout</a>
@@ -45,6 +45,9 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Article" asp-action="Create">Create Article</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Profile">Profile</a>
                             </li>
                             @if (User.IsInRole("Admin"))
                             {
@@ -75,8 +78,9 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Article" asp-action="Index">Articles</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Article" asp-action="Create">Create Article</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Login">Create Article</a>
                             </li>
+
 
                             }
                         </ul>

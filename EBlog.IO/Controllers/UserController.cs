@@ -2,6 +2,7 @@
 using EBlog.Core.Enums;
 using EBlog.Repo.Interfaces;
 using EBlog.Service.Models.DTOs.AppUser;
+using EBlog.Service.Models.VMs.AppUser;
 using EBlog.Service.Services.AppUserServices;
 using EBlog.Service.Utilities.UnitOfWorks;
 using Microsoft.AspNetCore.Identity;
@@ -28,6 +29,19 @@ namespace EBlog.IO.Controllers
         {
             return View();
         }
+
+        public IActionResult ProfilePage()
+        {
+
+            ProfilePageVM user = new ProfilePageVM()
+            {
+                AppUserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+            };
+
+            return View(user);
+        }
+
+
 
         [HttpGet]
         public IActionResult Register()
@@ -96,7 +110,8 @@ namespace EBlog.IO.Controllers
         {
             await _appUserService.UpdateUser(model);
             //var user = await _appUserService.GetById(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            return View();
+            return RedirectToAction("Index","Home");
+
         }
 
         [HttpGet]

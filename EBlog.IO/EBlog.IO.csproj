@@ -15,4 +15,8 @@
     <ProjectReference Include="..\EBlog.Service\EBlog.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Comment\" />
+  </ItemGroup>
+
 </Project>

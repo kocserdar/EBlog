@@ -15,8 +15,6 @@
 
   <ItemGroup>
     <Folder Include="Models\DTOs\Common\" />
-    <Folder Include="Models\DTOs\Comment\" />
-    <Folder Include="Services\CommentServices\" />
     <Folder Include="Utilities\Exceptions\" />
   </ItemGroup>
 

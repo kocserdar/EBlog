@@ -16,12 +16,10 @@ namespace EBlog.Service.Services.ArticleServices
     public class ArticleServices : IArticleServices
     {
         private readonly IUnitOfWorks _unitOfWorks;
-        private readonly IArticleRepo _articleRepo;
 
-        public ArticleServices(IUnitOfWorks unitOfWorks, IArticleRepo articleRepo)
+        public ArticleServices(IUnitOfWorks unitOfWorks)
         {
             _unitOfWorks = unitOfWorks;
-            _articleRepo = articleRepo;
         }
 
         public async Task Create(CreateArticleDTO model)
@@ -29,21 +27,21 @@ namespace EBlog.Service.Services.ArticleServices
             var article = _unitOfWorks.Mapper.Map<Article>(model);
             article.Status = Core.Enums.Status.Active;
             article.CreatedAt = DateTime.Now;
-            await _articleRepo.Create(article);
+            await _unitOfWorks.ArticleRepo.Create(article);
 
         }
 
         public async Task Delete(int id)
         {
-            var article = await _articleRepo.GetById(id);
+            var article = await _unitOfWorks.ArticleRepo.GetById(id);
             article.Status = Core.Enums.Status.Passive;
             article.PassivedAt = DateTime.Now;
-            _articleRepo.Delete(article);
+            _unitOfWorks.ArticleRepo.Delete(article);
         }
 
         public async Task<GetArticleDetailVM> GetArticleDetail(int id)
         {
-            var article = await _articleRepo.GetFilteredFirstOrDefault(
+            var article = await _unitOfWorks.ArticleRepo.GetFilteredFirstOrDefault(
                 select: x => new GetArticleDetailVM
                 {
                     Id = x.Id,
@@ -74,7 +72,8 @@ namespace EBlog.Service.Services.ArticleServices
                                                         Text = x.Text,
                                                         CreateDate = x.CreatedAt,
                                                         UserName = x.AppUser.UserName  //x.AppUser.UserName
-                                                    }).ToList()
+                                                    })
+                                                    .ToList()
 
                 },
                 where: x => x.Id == id && x.Status != Core.Enums.Status.Passive,
@@ -84,7 +83,7 @@ namespace EBlog.Service.Services.ArticleServices
 
         public async Task<List<GetArticleVM>> GetArticles()
         {
-            var articles = await _articleRepo.GetFilteredList(
+            var articles = await _unitOfWorks.ArticleRepo.GetFilteredList(
                 select: x => new GetArticleVM
                 {
                     Id = x.Id,
@@ -111,13 +110,13 @@ namespace EBlog.Service.Services.ArticleServices
                 var article = _unitOfWorks.Mapper.Map<Article>(model);
                 article.UpdatedAt = DateTime.Now;
                 article.Status = Core.Enums.Status.Updated;
-                _articleRepo.Update(article);
+                _unitOfWorks.ArticleRepo.Update(article);
             }
         }
 
         public async Task<EditArticleDTO> GetArticle(int id)
         {
-            var article = await _articleRepo.GetById(id);
+            var article = await _unitOfWorks.ArticleRepo.GetById(id);
             return _unitOfWorks.Mapper.Map<EditArticleDTO>(article);
         }
     }

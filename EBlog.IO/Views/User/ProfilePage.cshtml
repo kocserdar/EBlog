@@ -1,0 +1,41 @@
+﻿@using EBlog.Service.Models.VMs.AppUser
+@model ProfilePageVM
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+
+
+
+
+<table style="width:100%">
+    <tr>
+        <td class="col-9">
+            <h4>My Articles</h4>
+            <hr />
+
+            foreach will be here
+            <div class="card border-secondary mb-3" style="max-width: 18rem;">
+                <div class="card-header bg-transparent border-secondary">Title</div>
+                <div class="card-body text-secondary">
+                    @* <h5 class="card-title">Success card title</h5> *@
+                    <p class="card-text">Content</p>
+                </div>
+                <div class="card-footer bg-transparent border-secondary">Footer</div>
+            </div>
+        <td class="col-3">
+            <div style="margin-left:10px">
+                <label asp-for="UserName"></label>
+                <input asp-for="UserName" />
+                <label asp-for="UserName"></label>
+                <input asp-for="UserName" disabled />
+            </br>
+                <a asp-controller="User" asp-action="UpdateUser">Edit your profile</a>
+            </div>
+
+        </td>
+
+
+    </tr>
+</table>

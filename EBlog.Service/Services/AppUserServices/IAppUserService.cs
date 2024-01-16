@@ -15,7 +15,7 @@ namespace EBlog.Service.Services.AppUserServices
         Task<SignInResult> Login(LoginDTO model);
         Task LogOut();
         Task<UpdateProfileDTO> GetById(string id);
-        Task UpdateUser(UpdateProfileDTO model);
+        Task<IdentityResult> UpdateUser(UpdateProfileDTO model);
 
         Task<IdentityResult> CreateRole(CreateRoleDTO model);
 

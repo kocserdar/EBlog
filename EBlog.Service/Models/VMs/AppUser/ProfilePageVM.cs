@@ -6,21 +6,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EBlog.Service.Models.VMs
+namespace EBlog.Service.Models.VMs.AppUser
 {
     public class ProfilePageVM
     {
-        public string Id { get; set; }
+        public string AppUserId { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? ImagePath { get; set; }
-        public string? Email { get; set;}
         public string? UserName { get; set; }
         public string? PhoneNumber { get; set; }
         public string? FullName { get; set; }
+        public bool IsMe { get; set; }
 
-        public virtual List<EBlog.Core.Entities.Article> Articles { get; set; }
-        public virtual List<EBlog.Core.Entities.Comment> Comments { get; set; }
-        public virtual List<EBlog.Core.Entities.Like> Likes { get; set; }
+        public virtual List<Core.Entities.Article> Articles { get; set; }
+        public virtual List<Core.Entities.Comment> Comments { get; set; }
+        public virtual List<Core.Entities.Like> Likes { get; set; }
     }
 }

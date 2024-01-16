@@ -17,6 +17,8 @@ namespace EBlog.Repo.Configurations
             builder.Property(x => x.CreatedAt).IsRequired(true);
             builder.Property(x => x.UpdatedAt).IsRequired(false); 
             builder.Property(x => x.PassivedAt).IsRequired(false);
+            //Created Time
+            //builder.Property(e => e.CreatedAt).HasDefaultValue(DateTime.Now);
         }
     }
 }

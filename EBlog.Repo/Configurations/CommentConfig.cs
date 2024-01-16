@@ -19,7 +19,7 @@ namespace EBlog.Repo.Configurations
             builder.HasOne(x => x.AppUser).WithMany(x => x.Comments).HasForeignKey(x => x.AppUserId);
 
             builder.HasOne(x => x.Article).WithMany(x => x.Comments).HasForeignKey(x => x.ArticleId).OnDelete(DeleteBehavior.NoAction);
-            
+
             base.Configure(builder);
         }
     }

@@ -44,17 +44,29 @@ else
 
 <a> | </a>
 
-<span style="cursor:pointer">
-    <a onclick="location.href ='@Url.Action("Create","Like",new{ id = Model.Id})'">
-        <img src="~/lib/img/Comment.png" style="width:20px" />
-        <a>@Html.DisplayFor(model => model.CommentCount)</a>
+<span>
+    <img src="~/lib/img/Comment.png" style="width:20px" />
+    <a>@Html.DisplayFor(model => model.CommentCount)</a>
     </a>
 </span>
+
+<a> | </a>
+
+<span>
+    <a>@Model.CreateDate.ToString("dd.MM.yyyy")</a>
+</span>
+
+<a> | </a>
+
+<span>
+    <a>@Model.GenreName</a>
+</span>
+
 
 @* <span style="cursor:pointer">
     <a onclick="location.href = '@Url.Action("Edit", "Article", new { id = Model.Id })'">Comment</a>
     <a>@Html.DisplayFor(model => model.CommentCount)</a>
-</span> *@
+    </span> *@
 
 <a> | </a>
 <hr />
@@ -66,6 +78,33 @@ else
     </span>
 </div>
 <hr />
+
+<div class="col-6">
+    <a><b>Comments</b></a>
+    <hr />
+    @foreach (var comment in Model.CommentList)
+    {
+
+        ;
+        <div style="border:solid;border-color:lightgrey;border-radius:15px;border-width:2px">
+
+            <p style="text-align:justify;margin:5px">@comment.Text</p>
+            <a style="margin:5px">@comment.UserName</a><a> | </a><a>@comment.CreateDate.ToString("dd.MM.yyyy")</a>
+
+        </div>
+        <hr />
+    }
+    <form method="get" action="@Url.Action("Create","Comment")">
+        <label class="col-12"><b>Leave a Comment</b></label>
+        <textarea name="usercommenttext" placeholder="Make us learn, make us laugh, make us think!" class="col-12" style="border:solid;border-color:lightgrey;border-radius:15px;border-width:2px"></textarea>
+        <input type="hidden" name="AppUserId" value="@Model.AppUserId" />
+        <input type="hidden" name="ArticleId" value="@Model.Id" />
+        <button class="btn-secondary" type="submit">Save Comment</button>
+        <hr />
+    </form>
+
+</div>
+
 
 
 @* ; text-decoration: underline; *@

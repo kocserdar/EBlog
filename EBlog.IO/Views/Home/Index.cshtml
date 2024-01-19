@@ -1,8 +1,126 @@
-﻿@{
+﻿@using EBlog.Service.Models.VMs.Home
+@model HomePageVM
+
+@{
     ViewData["Title"] = "Home Page";
 }
-
+@*
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div> *@
+
+@* <div class="card-body table-responsive p-0 col-12">
+    <table class="table table-head-fixed text-nowrap">
+        <thead>
+            <tr>
+                <th class="col-3">
+                    @Html.DisplayNameFor(model => model.Genres)
+                </th>
+                <th class="col-9">
+                    <b>Articles</b>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var g in Model.Genres)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => g.Name)
+                    </td>
+
+                </tr>
+                }
+                @foreach (var c in Model.Comments)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => c.Text)
+                        </td>
+
+                    </tr>
+                }
+
+        </tbody>
+    </table>
+</div> *@
+
+
+<div class="container">
+    <div class="row">
+        <!-- Tablo sütunu -->
+        <div class="col-md-2">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th> @Html.DisplayNameFor(model => model.Genres)</th>
+                        <!-- Diğer başlıklar -->
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var g in Model.Genres)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => g.Name)
+                            </td>
+
+                        </tr>
+                    }
+                    <!-- Diğer veriler -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Sağ tarafta kalan içerik sütunu -->
+        <div class="col-md-10">
+            <!-- Kartlar, metinler ve diğer içerikler buraya eklenebilir -->
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                @foreach (var a in Model.Articles)
+                {
+                    <div class="col" style="height:fit-content;max-height:150px">
+                        <div class="card">
+                            @* <img src="..." class="card-img-top" alt="..."> *@
+                            <div class="card-body">
+                                <h5 class="card-title">@a.Title</h5>
+                                <p class="card-text text-truncate">@Html.Raw(a.Content)</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+
+            @*             @foreach (var a in Model.Articles)
+            {
+            <div class="card col-6">
+            <div class="card-body">
+            <h5 class="card-title">@a.Title</h5>
+            <p class="card-text">@a.Content</p>
+            </div>
+            </div>
+            } *@
+
+
+            <!-- Diğer içerikler buraya eklenebilir -->
+        </div>
+    </div>
 </div>
+
+
+@* <div class="row row-cols-1 row-cols-md-2 g-4">
+    @foreach (var a in Model.Articles)
+    {
+        <div class="col">
+            <div class="card">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">@a.Title</h5>
+                    <p class="card-text">@a.Content</p>
+                </div>
+            </div>
+        </div>
+    }
+</div> *@
+

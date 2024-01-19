@@ -7,6 +7,7 @@ using EBlog.Service.Services.AppUserServices;
 using EBlog.Service.Services.ArticleServices;
 using EBlog.Service.Services.CommentServices;
 using EBlog.Service.Services.GenreServices;
+using EBlog.Service.Services.HomeServices;
 using EBlog.Service.Services.LikeServices;
 using EBlog.Service.Utilities.UnitOfWorks;
 using Microsoft.AspNetCore.Identity;
@@ -48,6 +49,7 @@ builder.Services.AddScoped<IGenreServices, GenreServices>();
 builder.Services.AddScoped<IArticleServices, ArticleServices>();
 builder.Services.AddScoped<ILikeServices, LikeServices>();
 builder.Services.AddScoped<ICommentServices, CommentServices>();
+builder.Services.AddScoped<IHomeServices, HomeServices>();
 
 //UnitOfWorks
 builder.Services.AddScoped<IUnitOfWorks, UnitOfWorks>();

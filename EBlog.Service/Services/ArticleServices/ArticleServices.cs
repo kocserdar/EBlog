@@ -91,6 +91,7 @@ namespace EBlog.Service.Services.ArticleServices
                     Title = x.Title,
                     CreateDate = x.CreatedAt,
                     GenreId = x.GenreId,
+                    GenreName = x.Genre.Name,
                     CommentCount = x.Comments.Where(x => x.Status != Core.Enums.Status.Passive).Count(),
                     LikeCount = x.Likes.Where(x => x.Status != Core.Enums.Status.Passive).Count(),
                     AuthorFullName = x.AppUser.FirstName + " " + x.AppUser.LastName,
@@ -98,7 +99,7 @@ namespace EBlog.Service.Services.ArticleServices
                 },
                 where: x => x.Status != Core.Enums.Status.Passive,
                 orderBy: x => x.OrderByDescending(x => x.CreatedAt),
-                join: x => x.Include(x => x.AppUser).Include(x => x.Likes).Include(x => x.Comments));
+                join: x => x.Include(x => x.AppUser).Include(x=>x.Genre).Include(x => x.Likes).Include(x => x.Comments));
             return articles;
 
         }

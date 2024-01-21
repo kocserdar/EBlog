@@ -12,6 +12,9 @@
     <table class="table">
         <thead>
             <th>
+                No
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
@@ -37,9 +40,13 @@
         </th>
         </thead>
         <tbody>
+            @{var i = 1;}
             @foreach(var item in Model)
             {
                 <tr style="cursor:pointer" onclick="location.href = '@Url.Action("Read","Article",new {id = item.Id})'">
+                    <td>
+                        @i
+                    </td>
                     <td>
                         @Html.DisplayFor(modelitem => item.Id)
                     </td>
@@ -67,6 +74,7 @@
                         @Html.DisplayFor(modelitem => item.GenreId)
                     </td>
                 </tr>
+                i++;
             }
         </tbody>
     </table>

@@ -4,87 +4,86 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-@*
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div> *@
-
-@* <div class="card-body table-responsive p-0 col-12">
-    <table class="table table-head-fixed text-nowrap">
-        <thead>
-            <tr>
-                <th class="col-3">
-                    @Html.DisplayNameFor(model => model.Genres)
-                </th>
-                <th class="col-9">
-                    <b>Articles</b>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var g in Model.Genres)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => g.Name)
-                    </td>
-
-                </tr>
-                }
-                @foreach (var c in Model.Comments)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => c.Text)
-                        </td>
-
-                    </tr>
-                }
-
-        </tbody>
-    </table>
-</div> *@
-
-
 <div class="container">
     <div class="row">
-        <!-- Tablo sütunu -->
         <div class="col-md-2">
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th> @Html.DisplayNameFor(model => model.Genres)</th>
-                        <!-- Diğer başlıklar -->
+                        <th>
+                            @Html.DisplayNameFor(model => model.Genres)
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
+                    <tr>
+                        <td>
+                            <a id="999" style="cursor:pointer" onclick="location.href = '@Url.Action("Index", "Home", new {page = 1, filter = 0, genreId = 999 })'">All</a>
+                        </td>
+                    </tr>
                     @foreach (var g in Model.Genres)
                     {
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => g.Name)
+                                @* <a asp-controller="Home" asp-action="Index" asp-route-id="@g.Id">@g.Name</a> *@
+                                <a id="@g.Id" style="cursor:pointer" onclick="location.href = '@Url.Action("Index", "Home", new {page = 1, filter = 0, genreId = g.Id })'">@g.Name</a>
+                                @* @Html.DisplayFor(modelItem => g.Name) *@
                             </td>
 
                         </tr>
                     }
-                    <!-- Diğer veriler -->
+
                 </tbody>
             </table>
         </div>
 
-        <!-- Sağ tarafta kalan içerik sütunu -->
         <div class="col-md-10">
-            <!-- Kartlar, metinler ve diğer içerikler buraya eklenebilir -->
+            <div>
+                <table class="table table-bordered">
+                    <tr>
+                        <td class="col-md-4" style="text-align:center">
+                            <a id="filter0" style="cursor:pointer" onclick="location.href = '@Url.Action("Index", "Home", new {page = Model.Page, genreId = Model.GenreId,filter = 0})'">Most Liked</a>
+                        </td>
+                        <td class="col-md-4" style="text-align:center">
+                            <a id="filter1" style="cursor:pointer" onclick="location.href = '@Url.Action("Index", "Home", new {page = Model.Page, genreId = Model.GenreId,filter = 1})'">Most Commented</a>
+                        </td>
+                        <td class="col-md-4" style="text-align:center">
+                            <a id="filter2" style="cursor:pointer" onclick="location.href = '@Url.Action("Index", "Home", new {page = Model.Page, genreId = Model.GenreId,filter = 2})'">New</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
             <div class="row row-cols-1 row-cols-md-2 g-4">
                 @foreach (var a in Model.Articles)
                 {
-                    <div class="col" style="height:fit-content;max-height:150px">
-                        <div class="card">
+                    <div class="col">
+                        <div class="card" style="max-height:150px">
                             @* <img src="..." class="card-img-top" alt="..."> *@
-                            <div class="card-body">
-                                <h5 class="card-title">@a.Title</h5>
-                                <p class="card-text text-truncate">@Html.Raw(a.Content)</p>
+                            <div class="card-body" style="cursor:pointer" onclick="location.href = '@Url.Action("Read","Article",new {id =a.Id})'">
+                                <h5 class="card-title"><b>@a.Title</b></h5>
+                                @if (a.Content.Length > 120)
+                                {
+                                    <p class="card-text">@Html.Raw(a.Content.Substring(0, 120) + "...")</p>
+                                }
+                                else
+                                {
+                                    var l = a.Content.Length;
+                                    <p class="card-text">@Html.Raw(a.Content.Substring(0, l))</p>
+
+                                }
+                            </div>
+                            <div class="card-footer">
+                                <img src="~/lib/img/Liked.png" style="width:15px" />
+                                <a>@a.LikeCount</a>
+                                <a> | </a>
+                                <img src="~/lib/img/Comment.png" style="width:20px" />
+                                <a>@a.CommentCount</a>
+                                <a> | </a>
+                                <a>@a.CreateDate.ToString("dd.MM.yyyy")</a>
+                                <a> | </a>
+                                <a>@a.GenreName</a>
+                                <a> | </a>
+                                <a>@a.AuthorFullName</a>
                             </div>
                         </div>
                     </div>
@@ -103,7 +102,6 @@
             } *@
 
 
-            <!-- Diğer içerikler buraya eklenebilir -->
         </div>
     </div>
 </div>
@@ -123,4 +121,60 @@
         </div>
     }
 </div> *@
+<hr />
+@* <div style="display:flex;justify-content:center">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+    </nav>
+</div> *@
+<div>
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" id="previous"><a class="page-link" href="@Url.Action("Index","Home",new { page = Model.Page-1, genreId = Model.GenreId, filter = Model.FilterId })">Previous</a></li>
+            <li class="page-item" id="current"><a class="page-link">1</a></li>
+            <li class="page-item" id="next"><a class="page-link" href="@Url.Action("Index","Home",new { page = Model.Page+1, genreId = Model.GenreId, filter = Model.FilterId })">Next</a></li>
+        </ul>
+    </nav>
+</div>
 
+
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            //Highligthing Chosed Ones
+            var genreId = @Model.GenreId;
+            var filterId = @Model.FilterId;
+            var genre = document.getElementById(genreId);
+            var filter = document.getElementById("filter" + filterId);
+
+            genre.style.fontWeight = 'bold';
+            filter.style.fontWeight = 'bold';
+
+            //Paging
+            var articlecount = @Model.Articles.Count;
+            var page = @Model.Page;
+
+            if (page == 1) {
+                var previous = document.getElementById("previous");
+                previous.className = "page-item disabled";
+            }
+
+            if (articlecount != 10) {
+                var next = document.getElementById("next");
+                next.className = "page-item disabled";
+            }
+
+            var current = document.getElementById("current").getElementsByClassName("page-link");
+            current[0].innerHTML = page;
+
+        });
+
+    </script>
+}

@@ -1,9 +1,12 @@
 ﻿using EBlog.Core.Entities;
+using EBlog.Service.Models.VMs.Article;
 using EBlog.Service.Models.VMs.Home;
 using EBlog.Service.Utilities.UnitOfWorks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -20,28 +23,185 @@ namespace EBlog.Service.Services.HomeServices
             _unitOfWorks = unitOfWorks;
         }
 
-        public async Task<HomePageVM> GetAll()
+        public async Task<HomePageVM> GetAll(int page, int genreId, int filter)
         {
-            List<Comment> comments = new List<Comment>();
+            int skip = (page - 1) * 10;
+            int take = (page * 10);
 
-            comments = await _unitOfWorks.CommentRepo.GetDefaults(x => x.Status != Core.Enums.Status.Passive);
-
-            List<Genre> genres = new List<Genre>(); 
-
+            List<Genre> genres = new List<Genre>();
             genres = await _unitOfWorks.GenreRepo.GetDefaults(x => x.Status != Core.Enums.Status.Passive);
+            
+            List<GetArticleVM> articles = new List<GetArticleVM>();
 
-            List<Article> articles = new List<Article>();
+            //Genre Chosen
+            if (genreId != 999)
+            {
+                switch (filter)
+                {
+                    case 0: //Most Liked
+                        articles = await _unitOfWorks.ArticleRepo.GetArticlesListPaged(
+                        select: x => new GetArticleVM
+                        {
+                            Id = x.Id,
+                            Content = x.Content,
+                            Title = x.Title,
+                            CreateDate = x.CreatedAt,
+                            GenreId = x.GenreId,
+                            GenreName = x.Genre.Name,
+                            CommentCount = x.Comments.Where(x => x.Status != Core.Enums.Status.Passive).Count(),
+                            LikeCount = x.Likes.Where(x => x.Status != Core.Enums.Status.Passive).Count(),
+                            AuthorFullName = x.AppUser.FirstName + " " + x.AppUser.LastName,
 
-            articles = await _unitOfWorks.ArticleRepo.GetDefaults(x => x.Status != Core.Enums.Status.Passive);
+                        },
+                        where: x => x.Status != Core.Enums.Status.Passive && x.GenreId == genreId,
+                        orderBy: x => x.OrderByDescending(x => x.Likes.Where(x => x.Status != Core.Enums.Status.Passive).Count()).Skip(skip).Take(take),
+                        join: x => x.Include(x => x.AppUser).Include(x => x.Genre).Include(x => x.Likes).Include(x => x.Comments)
+                        );
+                        break;
+                    case 1: // Most Comment
+                        articles = await _unitOfWorks.ArticleRepo.GetArticlesListPaged(
+                        select: x => new GetArticleVM
+                        {
+                            Id = x.Id,
+                            Content = x.Content,
+                            Title = x.Title,
+                            CreateDate = x.CreatedAt,
+                            GenreId = x.GenreId,
+                            GenreName = x.Genre.Name,
+                            CommentCount = x.Comments.Where(x => x.Status != Core.Enums.Status.Passive).Count(),
+                            LikeCount = x.Likes.Where(x => x.Status != Core.Enums.Status.Passive).Count(),
+                            AuthorFullName = x.AppUser.FirstName + " " + x.AppUser.LastName,
 
-            HomePageVM pageVM = new HomePageVM()
+                        },
+                        where: x => x.Status != Core.Enums.Status.Passive && x.GenreId == genreId,
+                        orderBy: x => x.OrderByDescending(x => x.Comments.Where(x => x.Status != Core.Enums.Status.Passive).Count()).Skip(skip).Take(take),
+                        join: x => x.Include(x => x.AppUser).Include(x => x.Genre).Include(x => x.Likes).Include(x => x.Comments)
+                        );
+                        break;
+                    case 2:
+                        articles = await _unitOfWorks.ArticleRepo.GetArticlesListPaged(
+                        select: x => new GetArticleVM
+                        {
+                            Id = x.Id,
+                            Content = x.Content,
+                            Title = x.Title,
+                            CreateDate = x.CreatedAt,
+                            GenreId = x.GenreId,
+                            GenreName = x.Genre.Name,
+                            CommentCount = x.Comments.Where(x => x.Status != Core.Enums.Status.Passive).Count(),
+                            LikeCount = x.Likes.Where(x => x.Status != Core.Enums.Status.Passive).Count(),
+                            AuthorFullName = x.AppUser.FirstName + " " + x.AppUser.LastName,
+
+                        },
+                        where: x => x.Status != Core.Enums.Status.Passive && x.GenreId == genreId,
+                        orderBy: x => x.OrderByDescending(x => x.CreatedAt).Skip(skip).Take(take),
+                        join: x => x.Include(x => x.AppUser).Include(x => x.Genre).Include(x => x.Likes).Include(x => x.Comments)
+                        );
+                        break;
+                }
+            }
+            else
+            {
+                switch (filter)
+                {
+                    case 0: //Most Liked
+                        articles = await _unitOfWorks.ArticleRepo.GetArticlesListPaged(
+                        select: x => new GetArticleVM
+                        {
+                            Id = x.Id,
+                            Content = x.Content,
+                            Title = x.Title,
+                            CreateDate = x.CreatedAt,
+                            GenreId = x.GenreId,
+                            GenreName = x.Genre.Name,
+                            CommentCount = x.Comments.Where(x => x.Status != Core.Enums.Status.Passive).Count(),
+                            LikeCount = x.Likes.Where(x => x.Status != Core.Enums.Status.Passive).Count(),
+                            AuthorFullName = x.AppUser.FirstName + " " + x.AppUser.LastName,
+
+                        },
+                        where: x => x.Status != Core.Enums.Status.Passive,
+                        orderBy: x => x.OrderByDescending(x => x.Likes.Where(x => x.Status != Core.Enums.Status.Passive).Count()).Skip(skip).Take(take),
+                        join: x => x.Include(x => x.AppUser).Include(x => x.Genre).Include(x => x.Likes).Include(x => x.Comments)
+                        );
+                        break;
+                    case 1: // Most Comment
+                        articles = await _unitOfWorks.ArticleRepo.GetArticlesListPaged(
+                        select: x => new GetArticleVM
+                        {
+                            Id = x.Id,
+                            Content = x.Content,
+                            Title = x.Title,
+                            CreateDate = x.CreatedAt,
+                            GenreId = x.GenreId,
+                            GenreName = x.Genre.Name,
+                            CommentCount = x.Comments.Where(x => x.Status != Core.Enums.Status.Passive).Count(),
+                            LikeCount = x.Likes.Where(x => x.Status != Core.Enums.Status.Passive).Count(),
+                            AuthorFullName = x.AppUser.FirstName + " " + x.AppUser.LastName,
+
+                        },
+                        where: x => x.Status != Core.Enums.Status.Passive,
+                        orderBy: x => x.OrderByDescending(x => x.Comments.Where(x => x.Status != Core.Enums.Status.Passive).Count()).Skip(skip).Take(take),
+
+                        join: x => x.Include(x => x.AppUser).Include(x => x.Genre).Include(x => x.Likes).Include(x => x.Comments)
+                        );
+                        break;
+                    case 2:
+                        articles = await _unitOfWorks.ArticleRepo.GetArticlesListPaged(
+                        select: x => new GetArticleVM
+                        {
+                            Id = x.Id,
+                            Content = x.Content,
+                            Title = x.Title,
+                            CreateDate = x.CreatedAt,
+                            GenreId = x.GenreId,
+                            GenreName = x.Genre.Name,
+                            CommentCount = x.Comments.Where(x => x.Status != Core.Enums.Status.Passive).Count(),
+                            LikeCount = x.Likes.Where(x => x.Status != Core.Enums.Status.Passive).Count(),
+                            AuthorFullName = x.AppUser.FirstName + " " + x.AppUser.LastName,
+
+                        },
+                        where: x => x.Status != Core.Enums.Status.Passive,
+                        orderBy: x => x.OrderByDescending(x => x.CreatedAt).Skip(skip).Take(take),
+                        join: x => x.Include(x => x.AppUser).Include(x => x.Genre).Include(x => x.Likes).Include(x => x.Comments)
+                        );
+                        break;
+                }
+            }
+
+            //Default
+            if (genreId == 999 && filter == 0)
+            {
+                    articles = await _unitOfWorks.ArticleRepo.GetArticlesListPaged(
+                    select: x => new GetArticleVM
+                    {
+                        Id = x.Id,
+                        Content = x.Content,
+                        Title = x.Title,
+                        CreateDate = x.CreatedAt,
+                        GenreId = x.GenreId,
+                        GenreName = x.Genre.Name,
+                        CommentCount = x.Comments.Where(x => x.Status != Core.Enums.Status.Passive).Count(),
+                        LikeCount = x.Likes.Where(x => x.Status != Core.Enums.Status.Passive).Count(),
+                        AuthorFullName = x.AppUser.FirstName + " " + x.AppUser.LastName,
+
+                    },
+                    where: x => x.Status != Core.Enums.Status.Passive,
+                    orderBy: x => x.OrderByDescending(x => x.Likes.Where(x => x.Status != Core.Enums.Status.Passive).Count()).Skip(skip).Take(take),
+                    join: x => x.Include(x => x.AppUser).Include(x => x.Genre).Include(x => x.Likes).Include(x => x.Comments)
+                    );
+            }
+
+
+            HomePageVM HomepageVM = new HomePageVM()
             {
                 AppUserId = "abc",
-                 Comments = comments,
-                 Articles = articles,
-                  Genres = genres,
+                Articles = articles,
+                Genres = genres,
+                FilterId = filter,
+                GenreId = genreId,
+                Page = page
             };
-            return pageVM;
+            return HomepageVM;
         }
     }
 }

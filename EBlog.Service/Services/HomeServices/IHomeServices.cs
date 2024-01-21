@@ -9,6 +9,7 @@ namespace EBlog.Service.Services.HomeServices
 {
     public interface IHomeServices
     {
-        Task<HomePageVM> GetAll(); 
+        Task<HomePageVM> GetAll(int page, int genreId, int filter);
+
     }
 }

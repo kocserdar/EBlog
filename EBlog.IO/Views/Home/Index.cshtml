@@ -25,18 +25,13 @@
                     {
                         <tr>
                             <td>
-                                @* <a asp-controller="Home" asp-action="Index" asp-route-id="@g.Id">@g.Name</a> *@
                                 <a id="@g.Id" style="cursor:pointer" onclick="location.href = '@Url.Action("Index", "Home", new {page = 1, filter = 0, genreId = g.Id })'">@g.Name</a>
-                                @* @Html.DisplayFor(modelItem => g.Name) *@
                             </td>
-
                         </tr>
                     }
-
                 </tbody>
             </table>
         </div>
-
         <div class="col-md-10">
             <div>
                 <table class="table table-bordered">
@@ -81,58 +76,18 @@
                                 <a> | </a>
                                 <a>@a.CreateDate.ToString("dd.MM.yyyy")</a>
                                 <a> | </a>
-                                <a>@a.GenreName</a>
+                                <a style="cursor:pointer" onclick="location.href = '@Url.Action("Index","Home",new {page = 1, genreId = a.GenreId,filter = 0})'">@a.GenreName</a>
                                 <a> | </a>
-                                <a>@a.AuthorFullName</a>
+                                <a style ="cursor:pointer" onclick="location.href = '@Url.Action("ProfilePage", "User", new {id = a.UserId})'">@a.AuthorFullName</a>
                             </div>
                         </div>
                     </div>
                 }
             </div>
-
-
-            @*             @foreach (var a in Model.Articles)
-            {
-            <div class="card col-6">
-            <div class="card-body">
-            <h5 class="card-title">@a.Title</h5>
-            <p class="card-text">@a.Content</p>
-            </div>
-            </div>
-            } *@
-
-
         </div>
     </div>
 </div>
-
-
-@* <div class="row row-cols-1 row-cols-md-2 g-4">
-    @foreach (var a in Model.Articles)
-    {
-        <div class="col">
-            <div class="card">
-                <img src="..." class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">@a.Title</h5>
-                    <p class="card-text">@a.Content</p>
-                </div>
-            </div>
-        </div>
-    }
-</div> *@
 <hr />
-@* <div style="display:flex;justify-content:center">
-    <nav aria-label="Page navigation">
-        <ul class="pagination">
-            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-        </ul>
-    </nav>
-</div> *@
 <div>
     <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">
@@ -153,28 +108,22 @@
             var filterId = @Model.FilterId;
             var genre = document.getElementById(genreId);
             var filter = document.getElementById("filter" + filterId);
-
             genre.style.fontWeight = 'bold';
             filter.style.fontWeight = 'bold';
 
             //Paging
             var articlecount = @Model.Articles.Count;
             var page = @Model.Page;
-
             if (page == 1) {
                 var previous = document.getElementById("previous");
                 previous.className = "page-item disabled";
             }
-
             if (articlecount != 10) {
                 var next = document.getElementById("next");
                 next.className = "page-item disabled";
             }
-
             var current = document.getElementById("current").getElementsByClassName("page-link");
             current[0].innerHTML = page;
-
         });
-
     </script>
 }

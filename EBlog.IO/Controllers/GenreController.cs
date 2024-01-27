@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EBlog.IO.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class GenreController : Controller
     {
         private readonly IGenreServices _genreServices;
@@ -44,7 +45,6 @@ namespace EBlog.IO.Controllers
             return RedirectToAction("Index");
 
         }
-
 
         [HttpPost]
         public async Task<IActionResult> CreateGenre(CreateGenreDTO model)

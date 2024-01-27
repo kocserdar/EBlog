@@ -60,9 +60,13 @@
 
 </div>
 
-<p>
-    <a asp-action="CreateGenre">Create New</a>
-</p>
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="CreateGenre">Create New</a>
+    </p>
+}
+
 
 
 

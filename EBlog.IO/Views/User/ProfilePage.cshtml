@@ -5,37 +5,75 @@
     ViewData["Title"] = "Profile";
 }
 
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+            <table class="table table-bordered">
+                <tr>
+                    <td>
+                        <img src="" style="height:150px" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a>@Model.UserName</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a>@Model.FullName</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a>@Model.PhoneNumber</a>
+                    </td>
+                </tr>
 
+            </table>
+            @if (Model.IsMe is true)
+            {
+                <a>Edit My Profile</a>
+            }
+        </div>
+        <div class="col-md-10">
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                @foreach (var a in Model.Articles)
+                {
+                    <div class="col">
+                        <div class="card" style="max-height:150px">
+                            @* <img src="..." class="card-img-top" alt="..."> *@
+                            <div class="card-body" style="cursor:pointer" onclick="location.href = '@Url.Action("Read","Article",new {id =a.Id})'">
+                                <h5 class="card-title"><b>@a.Title</b></h5>
+                                @if (a.Content.Length > 120)
+                                {
+                                    <p class="card-text">@Html.Raw(a.Content.Substring(0, 120) + "...")</p>
+                                }
+                                else
+                                {
+                                    var l = a.Content.Length;
+                                    <p class="card-text">@Html.Raw(a.Content.Substring(0, l))</p>
 
-
-
-<table style="width:100%">
-    <tr>
-        <td class="col-9">
-            <h4>My Articles</h4>
-            <hr />
-
-            foreach will be here
-            <div class="card border-secondary mb-3" style="max-width: 18rem;">
-                <div class="card-header bg-transparent border-secondary">Title</div>
-                <div class="card-body text-secondary">
-                    @* <h5 class="card-title">Success card title</h5> *@
-                    <p class="card-text">Content</p>
-                </div>
-                <div class="card-footer bg-transparent border-secondary">Footer</div>
+                                }
+                            </div>
+                            <div class="card-footer">
+                                <img src="~/lib/img/Liked.png" style="width:15px" />
+                                <a>@a.LikeCount</a>
+                                <a> | </a>
+                                <img src="~/lib/img/Comment.png" style="width:20px" />
+                                <a>@a.CommentCount</a>
+                                <a> | </a>
+                                <a>@a.CreateDate.ToString("dd.MM.yyyy")</a>
+                                <a> | </a>
+                                <a>@a.GenreName</a>
+                                <a> | </a>
+                                <a>@a.AuthorFullName</a>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
-        <td class="col-3">
-            <div style="margin-left:10px">
-                <label asp-for="UserName"></label>
-                <input asp-for="UserName" />
-                <label asp-for="UserName"></label>
-                <input asp-for="UserName" disabled />
-            </br>
-                <a asp-controller="User" asp-action="UpdateUser">Edit your profile</a>
-            </div>
-
-        </td>
-
-
-    </tr>
-</table>
+        </div>
+    </div>
+</div>
+<hr />

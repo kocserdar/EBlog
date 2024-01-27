@@ -30,7 +30,8 @@ namespace EBlog.IO.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 var a = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
-                ViewData["UserName"] = a.FirstName + " " + a.LastName;
+                //ViewData["UserName"] = a.FirstName + " " + a.LastName;
+                HttpContext.Session.SetString("UserName", a.FirstName + " " + a.LastName);
             }
 
             return View(await _homeServices.GetAll(page, genreId, filter));

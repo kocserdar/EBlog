@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EBlog.Core.Entities;
+using EBlog.Service.Models.VMs.Article;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +10,7 @@ namespace EBlog.Service.Models.DTOs.AppUser
 {
     public class ProfilePageDTO
     {
-        public string AppUserId { get; set; }
+        public string Id { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? ImagePath { get; set; }
@@ -17,8 +19,8 @@ namespace EBlog.Service.Models.DTOs.AppUser
         public string? FullName { get; set; }
         public bool IsMe { get; set; }
 
-        public virtual List<Core.Entities.Article> Articles { get; set; }
-        public virtual List<Core.Entities.Comment> Comments { get; set; }
-        public virtual List<Core.Entities.Like> Likes { get; set; }
+        public virtual List<GetArticleAdminVM> Articles { get; set; }
+
+        public List<EBlog.Core.Entities.Genre> Genres { get; set; }
     }
 }

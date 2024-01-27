@@ -1,4 +1,5 @@
 ﻿using EBlog.Core.Entities;
+using EBlog.Core.Helpers;
 using EBlog.Service.Models.VMs.Article;
 using EBlog.Service.Models.VMs.Home;
 using EBlog.Service.Utilities.UnitOfWorks;
@@ -25,8 +26,9 @@ namespace EBlog.Service.Services.HomeServices
 
         public async Task<HomePageVM> GetAll(int page, int genreId, int filter)
         {
-            int skip = (page - 1) * 10;
-            int take = (page * 10);
+
+            int skip = Paging.PagingFunc(page).skip;
+            int take = Paging.PagingFunc(page).take;
 
             List<Genre> genres = new List<Genre>();
             genres = await _unitOfWorks.GenreRepo.GetDefaults(x => x.Status != Core.Enums.Status.Passive);
@@ -43,6 +45,7 @@ namespace EBlog.Service.Services.HomeServices
                         select: x => new GetArticleVM
                         {
                             Id = x.Id,
+                            UserId = x.AppUser.Id,
                             Content = x.Content,
                             Title = x.Title,
                             CreateDate = x.CreatedAt,
@@ -63,6 +66,7 @@ namespace EBlog.Service.Services.HomeServices
                         select: x => new GetArticleVM
                         {
                             Id = x.Id,
+                            UserId = x.AppUser.Id,
                             Content = x.Content,
                             Title = x.Title,
                             CreateDate = x.CreatedAt,
@@ -83,6 +87,7 @@ namespace EBlog.Service.Services.HomeServices
                         select: x => new GetArticleVM
                         {
                             Id = x.Id,
+                            UserId = x.AppUser.Id,
                             Content = x.Content,
                             Title = x.Title,
                             CreateDate = x.CreatedAt,
@@ -109,6 +114,7 @@ namespace EBlog.Service.Services.HomeServices
                         select: x => new GetArticleVM
                         {
                             Id = x.Id,
+                            UserId = x.AppUser.Id,
                             Content = x.Content,
                             Title = x.Title,
                             CreateDate = x.CreatedAt,
@@ -129,6 +135,7 @@ namespace EBlog.Service.Services.HomeServices
                         select: x => new GetArticleVM
                         {
                             Id = x.Id,
+                            UserId = x.AppUser.Id,
                             Content = x.Content,
                             Title = x.Title,
                             CreateDate = x.CreatedAt,
@@ -150,6 +157,7 @@ namespace EBlog.Service.Services.HomeServices
                         select: x => new GetArticleVM
                         {
                             Id = x.Id,
+                            UserId = x.AppUser.Id,
                             Content = x.Content,
                             Title = x.Title,
                             CreateDate = x.CreatedAt,
@@ -175,6 +183,7 @@ namespace EBlog.Service.Services.HomeServices
                     select: x => new GetArticleVM
                     {
                         Id = x.Id,
+                        UserId = x.AppUser.Id,
                         Content = x.Content,
                         Title = x.Title,
                         CreateDate = x.CreatedAt,

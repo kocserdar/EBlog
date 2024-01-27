@@ -7,7 +7,10 @@ using EBlog.Service.Services.AppUserServices;
 using EBlog.Service.Utilities.UnitOfWorks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using System;
 using System.Security.Claims;
 
 namespace EBlog.IO.Controllers
@@ -17,31 +20,32 @@ namespace EBlog.IO.Controllers
         private readonly IUnitOfWorks _unitOfWorks;
         private readonly IAppUserService _appUserService;
 
-
         public UserController(IUnitOfWorks unitOfWorks, IAppUserService appUserService)
         {
             _unitOfWorks = unitOfWorks;
             _appUserService = appUserService;
-
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            return View(await _appUserService.GetAllUsers());
         }
 
-        public IActionResult ProfilePage()
+        public async Task<IActionResult> ProfilePage(string id)
         {
+            ProfilePageVM user = await _appUserService.GetByIdProfilePage(id);
 
-            ProfilePageVM user = new ProfilePageVM()
+            if (user.Id == User.FindFirstValue(ClaimTypes.NameIdentifier))
             {
-                AppUserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
-            };
+                user.IsMe = true;
+            }
+            else
+            {
+                user.IsMe= false;
+            }
 
             return View(user);
         }
-
-
 
         [HttpGet]
         public IActionResult Register()
@@ -67,25 +71,28 @@ namespace EBlog.IO.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+
+            HttpContext.Session.SetString("ReturnUrl", Request.Headers["Referer"].ToString());
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginDTO model)
         {
+            var returnUrl = HttpContext.Session.GetString("ReturnUrl");
+
             if (ModelState.IsValid)
             {
                 var result = await _appUserService.Login(model);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
+                    return Redirect(returnUrl);
                 }
 
                 if (!result.Succeeded)
                 {
                     return View("NotActiveUser");
                 }
-
             }
             return View();
         }
@@ -110,7 +117,7 @@ namespace EBlog.IO.Controllers
         {
             await _appUserService.UpdateUser(model);
             //var user = await _appUserService.GetById(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
 
         }
 
@@ -134,6 +141,13 @@ namespace EBlog.IO.Controllers
                 }
             }
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MakeUserPassive(string id)
+        {
+            await _appUserService.MakeUserPassive(id);
+            return RedirectToAction("Index");
         }
 
     }

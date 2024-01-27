@@ -23,6 +23,7 @@ namespace EBlog.Service.Mapping
             CreateMap<AppUser, RegisterDTO>().ReverseMap();
             CreateMap<AppUser, LoginDTO>().ReverseMap();
             CreateMap<AppUser, UpdateProfileDTO>().ReverseMap();
+            CreateMap<AppUser, ProfilePageVM>().ReverseMap();
 
             CreateMap<AppUser, AppUserListVM>().ReverseMap();
 

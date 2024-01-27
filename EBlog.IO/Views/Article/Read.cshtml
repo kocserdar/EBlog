@@ -19,27 +19,39 @@
     <a> | </a>
 }
 
-
-@if (Model.IsLiked is true)
+@if (User.Identity.IsAuthenticated)
 {
-    <span style="cursor:pointer">
-        <a onclick="location.href ='@Url.Action("Delete","Like",new{ Id = Model.Id})'">
-            <img src="~/lib/img/Liked.png" style="width:20px" />
-            <a>@Html.DisplayFor(model => model.LikeCount)</a>
-        </a>
-    </span>
+    @if (Model.IsLiked is true)
+    {
+        <span style="cursor:pointer">
+            <a onclick="location.href ='@Url.Action("Delete","Like",new{ Id = Model.Id})'">
+                <img src="~/lib/img/Liked.png" style="width:20px" />
+                <a>@Html.DisplayFor(model => model.LikeCount)</a>
+            </a>
+        </span>
+    }
+    else
+    {
+        <span style="cursor:pointer">
+            <a onclick="location.href ='@Url.Action("Create","Like",new{ id = Model.Id})'">
+                <img src="~/lib/img/Like.png" style="width:20px" />
+                <a>@Html.DisplayFor(model => model.LikeCount)</a>
+            </a>
+        </span>
+    }
+
 }
 else
 {
-
     <span style="cursor:pointer">
-        <a onclick="location.href ='@Url.Action("Create","Like",new{ id = Model.Id})'">
+        <a onclick="location.href ='@Url.Action("Login","User",new{ id = Model.Id})'">
             <img src="~/lib/img/Like.png" style="width:20px" />
             <a>@Html.DisplayFor(model => model.LikeCount)</a>
         </a>
     </span>
 
 }
+
 
 
 <a> | </a>
@@ -58,7 +70,7 @@ else
 <a> | </a>
 
 <span>
-    <a>@Model.GenreName</a>
+    <a style="cursor:pointer" onclick="location.href = '@Url.Action("Index","Home",new {page = 1, genreId = Model.GenreId,filter = 0})'">@Model.GenreName</a>
 </span>
 
 
@@ -98,7 +110,14 @@ else
         <textarea name="usercommenttext" placeholder="Make us learn, make us laugh, make us think!" class="col-12" style="border:solid;border-color:lightgrey;border-radius:15px;border-width:2px"></textarea>
         <input type="hidden" name="AppUserId" value="@Model.AppUserId" />
         <input type="hidden" name="ArticleId" value="@Model.Id" />
-        <button class="btn-secondary" type="submit">Save Comment</button>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <button class="btn-secondary" type="submit">Save Comment</button>
+        }
+        else
+        {
+            <button class="btn-secondary" type="submit" asp-action="Login" asp-controller="User">Login to comment</button>
+        }
         <hr />
     </form>
 

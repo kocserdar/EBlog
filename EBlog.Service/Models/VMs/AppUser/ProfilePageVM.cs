@@ -1,4 +1,6 @@
 ﻿using EBlog.Core.Entities;
+using EBlog.Service.Models.VMs.Article;
+using EBlog.Service.Models.VMs.Genre;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
@@ -10,7 +12,7 @@ namespace EBlog.Service.Models.VMs.AppUser
 {
     public class ProfilePageVM
     {
-        public string AppUserId { get; set; }
+        public string Id { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? ImagePath { get; set; }
@@ -18,9 +20,12 @@ namespace EBlog.Service.Models.VMs.AppUser
         public string? PhoneNumber { get; set; }
         public string? FullName { get; set; }
         public bool IsMe { get; set; }
+        public int FilterId { get; set; }
+        public int Page { get; set; }
+        public int GenreId { get; set; }
 
-        public virtual List<Core.Entities.Article> Articles { get; set; }
-        public virtual List<Core.Entities.Comment> Comments { get; set; }
-        public virtual List<Core.Entities.Like> Likes { get; set; }
+        public virtual List<GetArticleAdminVM> Articles { get; set; }
+
+        public List<GetGenreVM> Genres { get; set; }
     }
 }

@@ -3,15 +3,21 @@ using EBlog.Core.Enums;
 using EBlog.Repo.Interfaces;
 using EBlog.Service.Models.DTOs.AppUser;
 using EBlog.Service.Models.VMs.AppUser;
+using EBlog.Service.Models.VMs.Article;
+using EBlog.Service.Models.VMs.Genre;
+using EBlog.Service.Models.VMs.Like;
 using EBlog.Service.Utilities.UnitOfWorks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace EBlog.Service.Services.AppUserServices
 {
@@ -95,6 +101,24 @@ namespace EBlog.Service.Services.AppUserServices
 
         }
 
+        public async Task<IdentityResult> MakeUserPassive(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if(user.Status == Status.Passive) 
+            {
+                user.Status = Status.Updated;
+                user.UpdatedAt = DateTime.Now;
+            }
+            else
+            {
+                user.Status = Status.Passive;
+                user.PassivedAt = DateTime.Now;
+            }
+            var result = await _userManager.UpdateAsync(user);
+            return result;
+        }
+        
+
         public async Task<IdentityResult> CreateRole(CreateRoleDTO model)
         {
             if (model != null)
@@ -112,7 +136,53 @@ namespace EBlog.Service.Services.AppUserServices
         }
 
 
+        public async Task<List<AppUserListVM>> GetAllUsers()
+        {
+            var users = await _unitOfWorks.AppUserRepo.GetFilteredList(
+                select: x => new AppUserListVM
+                {
+                    Id = x.Id,
+                    FullName = EBlog.Core.Helpers.FullName.GetFullName(x.FirstName, x.LastName),
+                    Email = x.Email,
+                    CreatedAt = x.CreatedAt,
+                    Status = x.Status,
+                    RoleName = "abc",
+                    ArticleCount = x.Articles.Count(),
+                },
+                join: x => x.Include(x => x.Articles));
+            return users;
+        }
 
+        public async Task<ProfilePageVM> GetByIdProfilePage(string id)
+        {
+            var user = await _unitOfWorks.AppUserRepo.GetDefault(x => x.Id == id);
+            var model = _unitOfWorks.Mapper.Map<ProfilePageVM>(user);
+            model.FullName = EBlog.Core.Helpers.FullName.GetFullName(model.FirstName, model.LastName);
+
+            var genres= await _unitOfWorks.GenreRepo.GetDefaults(x=>x.Status!= Status.Passive);
+            model.Genres = _unitOfWorks.Mapper.Map<List<GetGenreVM>>(genres);
+
+            model.Articles = await _unitOfWorks.ArticleRepo.GetFilteredList(
+                select: x => new GetArticleAdminVM
+                {
+                    Id = x.Id,
+                    Status = x.Status,
+                    Content = x.Content,
+                    Title = x.Title,
+                    CreateDate = x.CreatedAt,
+                    GenreId = x.GenreId,
+                    GenreName = x.Genre.Name,
+                    
+                    AuthorFullName = EBlog.Core.Helpers.FullName.GetFullName(x.AppUser.FirstName, x.AppUser.LastName),
+                    CommentCount = x.Comments.Count(),
+                    LikeCount = x.Likes.Count(),
+                },
+                where: x => x.AppUserId == model.Id,
+                orderBy: x => x.OrderByDescending(x => x.CreatedAt),
+                join: x => x.Include(x => x.AppUser).Include(x => x.Comments).Include(x => x.Genre).Include(x => x.Likes));
+            
+            return model;
+        }
 
 
         //public async Task<AppUser> GetAllUserInfo(string userId)

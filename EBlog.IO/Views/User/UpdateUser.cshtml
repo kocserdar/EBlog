@@ -4,10 +4,10 @@
     ViewData["Title"] = "UpdateUser";
 }
 
-<h1>UpdateUser</h1>
+<h1 class="col-md-4 mx-auto">Update Your Profile</h1>
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 mx-auto">
         <form asp-action="UpdateUser">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group" hidden>
@@ -15,43 +15,52 @@
                 <input asp-for="Id" class="form-control" />
                 <span asp-validation-for="Id" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput" placeholder="Serdar" asp-for="FirstName">
+                <label asp-for="FirstName"></label>
             </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput" placeholder="Koç" asp-for="LastName">
+                <label asp-for="LastName"></label>
             </div>
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" disabled/>
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" asp-for="UserName">
+                <label asp-for="UserName"></label>
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
+            <div class="form-floating mb-3">
+                <input type="tel" class="form-control" id="floatingInput" placeholder="" asp-for="PhoneNumber">
+                <label asp-for="PhoneNumber"></label>
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ImagePath" class="control-label"></label>
-                <input asp-for="ImagePath" class="form-control" />
-                <span asp-validation-for="ImagePath" class="text-danger"></span>
+            <div class="form-floating">
+                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" asp-for="Password">
+                <label asp-for="Password"></label>
+                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="ConfirmPassword" class="control-label"></label>
-                <input asp-for="ConfirmPassword" class="form-control" />
+            <div class="form-floating">
+                <input type="password" class="form-control" id="floatingPassword" placeholder="Confirm Password" asp-for="ConfirmPassword">
+                <label asp-for="ConfirmPassword"></label>
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
-                <input type="submit" value="UpdateUser" class="btn btn-primary" />
+                <input type="submit" value="Update User" class="btn btn-secondary" />
             </div>
         </form>
+        <br />
+        <form asp-action="UploadImage" method="post" enctype="multipart/form-data">
+            <label asp-for="ImagePath"></label>
+            <input class="form-control" type="file" name="imageFile" /><br />
+            <button class="btn btn-secondary" type="submit">Upload Image</button>
+        </form>
     </div>
+</div>
+
+
+
+
+<div class="mb-3">
+    <label for="formFile" class="form-label">Default file input example</label>
+    <input class="form-control" type="file" id="formFile">
 </div>

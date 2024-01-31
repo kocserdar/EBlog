@@ -51,14 +51,21 @@ namespace EBlog.Service.Services.AppUserServices
         {
             var user = await _unitOfWorks.AppUserRepo.GetDefault(x => x.UserName == model.UserName);
 
-            if (user.Status == Status.Passive)
+            if (user is null)
             {
                 return SignInResult.Failed;
             }
             else
             {
-                var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
-                return result;
+                if (user.Status == Status.Passive)
+                {
+                    return SignInResult.Failed;
+                }
+                else
+                {
+                    var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
+                    return result;
+                }
             }
         }
 
@@ -104,7 +111,7 @@ namespace EBlog.Service.Services.AppUserServices
         public async Task<IdentityResult> MakeUserPassive(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            if(user.Status == Status.Passive) 
+            if (user.Status == Status.Passive)
             {
                 user.Status = Status.Updated;
                 user.UpdatedAt = DateTime.Now;
@@ -117,7 +124,7 @@ namespace EBlog.Service.Services.AppUserServices
             var result = await _userManager.UpdateAsync(user);
             return result;
         }
-        
+
 
         public async Task<IdentityResult> CreateRole(CreateRoleDTO model)
         {
@@ -139,27 +146,36 @@ namespace EBlog.Service.Services.AppUserServices
         public async Task<List<AppUserListVM>> GetAllUsers()
         {
             var users = await _unitOfWorks.AppUserRepo.GetFilteredList(
-                select: x => new AppUserListVM
-                {
-                    Id = x.Id,
-                    FullName = EBlog.Core.Helpers.FullName.GetFullName(x.FirstName, x.LastName),
-                    Email = x.Email,
-                    CreatedAt = x.CreatedAt,
-                    Status = x.Status,
-                    RoleName = "abc",
-                    ArticleCount = x.Articles.Count(),
-                },
+               select: x => new AppUserListVM
+               {
+                   Id = x.Id,
+                   FullName = EBlog.Core.Helpers.FullName.GetFullName(x.FirstName, x.LastName),
+                   Email = x.Email,
+                   CreatedAt = x.CreatedAt,
+                   Status = x.Status,
+                   ArticleCount = x.Articles.Count(),
+               },
                 join: x => x.Include(x => x.Articles));
+
+            foreach (var user in users)
+            {
+                var u = await _userManager.FindByIdAsync(user.Id);
+                var r = await _userManager.GetRolesAsync(u);
+
+                user.RoleName = r.FirstOrDefault();
+            }
+
             return users;
         }
 
         public async Task<ProfilePageVM> GetByIdProfilePage(string id)
         {
             var user = await _unitOfWorks.AppUserRepo.GetDefault(x => x.Id == id);
+
             var model = _unitOfWorks.Mapper.Map<ProfilePageVM>(user);
             model.FullName = EBlog.Core.Helpers.FullName.GetFullName(model.FirstName, model.LastName);
 
-            var genres= await _unitOfWorks.GenreRepo.GetDefaults(x=>x.Status!= Status.Passive);
+            var genres = await _unitOfWorks.GenreRepo.GetDefaults(x => x.Status != Status.Passive);
             model.Genres = _unitOfWorks.Mapper.Map<List<GetGenreVM>>(genres);
 
             model.Articles = await _unitOfWorks.ArticleRepo.GetFilteredList(
@@ -172,7 +188,7 @@ namespace EBlog.Service.Services.AppUserServices
                     CreateDate = x.CreatedAt,
                     GenreId = x.GenreId,
                     GenreName = x.Genre.Name,
-                    
+
                     AuthorFullName = EBlog.Core.Helpers.FullName.GetFullName(x.AppUser.FirstName, x.AppUser.LastName),
                     CommentCount = x.Comments.Count(),
                     LikeCount = x.Likes.Count(),
@@ -180,7 +196,14 @@ namespace EBlog.Service.Services.AppUserServices
                 where: x => x.AppUserId == model.Id,
                 orderBy: x => x.OrderByDescending(x => x.CreatedAt),
                 join: x => x.Include(x => x.AppUser).Include(x => x.Comments).Include(x => x.Genre).Include(x => x.Likes));
-            
+
+            return model;
+        }
+
+        public async Task<GetRolesVM> GetRoles()
+        {
+            GetRolesVM model = new GetRolesVM();
+            model.Roles = await _rolemanager.Roles.ToListAsync();
             return model;
         }
 

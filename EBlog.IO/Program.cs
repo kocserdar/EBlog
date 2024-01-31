@@ -11,6 +11,7 @@ using EBlog.Service.Services.HomeServices;
 using EBlog.Service.Services.LikeServices;
 using EBlog.Service.Utilities.UnitOfWorks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Hosting.Internal;
 
 var builder = WebApplication.CreateBuilder(args);
 

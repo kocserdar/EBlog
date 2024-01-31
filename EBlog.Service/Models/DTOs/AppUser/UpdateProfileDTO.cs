@@ -13,32 +13,32 @@ namespace EBlog.Service.Models.DTOs.AppUser
         [Display(Name = "ID ")]
         public string Id { get; set; }
 
-        [Required(ErrorMessage = "Boş Geçilemez")]
-        [Display(Name = "Adı ")]
+        [Required(ErrorMessage = "Can not be empty")]
+        [Display(Name = "First Name ")]
         public string FirstName { get; set; }
 
-        [Required(ErrorMessage = "Boş Geçilemez")]
-        [Display(Name = "Soyadı ")]
+        [Required(ErrorMessage = "Can not be empty")]
+        [Display(Name = "Last Name ")]
         public string LastName { get; set; }
 
-        [Required(ErrorMessage = "Boş Geçilemez")]
+        [Required(ErrorMessage = "Can not be empty")]
         [DataType(DataType.EmailAddress)]
-        [DisplayName("Email Adresi")]
+        [DisplayName("E-mail Address")]
         public string UserName { get; set; }
 
-        [DisplayName("Profil Resmi")]
+        [DisplayName("Profile Picture")]
         public string? ImagePath { get; set; }
 
-        [DisplayName("Telefon")]
+        [DisplayName("Phone Number")]
         public string? PhoneNumber { get; set; }
 
         [DataType(DataType.Password)]
-        [DisplayName("Şifre")]
+        [DisplayName("Password")]
         public string? Password { get; set; }
 
         [DataType(DataType.Password)]
-        [DisplayName("Şifre Tekrar")]
-        [Compare(nameof(Password), ErrorMessage = "Şifreler aynı olmalıdır")]
+        [DisplayName("Confirm Password")]
+        [Compare(nameof(Password), ErrorMessage = "Passwords must be same")]
         public string? ConfirmPassword { get; set; }
     }
 }

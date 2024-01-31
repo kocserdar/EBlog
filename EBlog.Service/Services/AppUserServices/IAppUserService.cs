@@ -21,6 +21,6 @@ namespace EBlog.Service.Services.AppUserServices
         Task<IdentityResult> CreateRole(CreateRoleDTO model);
         Task<List<AppUserListVM>> GetAllUsers();
         Task<ProfilePageVM> GetByIdProfilePage(string id);
-
+        Task<GetRolesVM> GetRoles();
     }
 }

@@ -5,6 +5,7 @@ using EBlog.Service.Models.DTOs.AppUser;
 using EBlog.Service.Models.VMs.AppUser;
 using EBlog.Service.Services.AppUserServices;
 using EBlog.Service.Utilities.UnitOfWorks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -20,6 +21,7 @@ namespace EBlog.IO.Controllers
         private readonly IUnitOfWorks _unitOfWorks;
         private readonly IAppUserService _appUserService;
 
+
         public UserController(IUnitOfWorks unitOfWorks, IAppUserService appUserService)
         {
             _unitOfWorks = unitOfWorks;
@@ -33,15 +35,16 @@ namespace EBlog.IO.Controllers
 
         public async Task<IActionResult> ProfilePage(string id)
         {
+            if(id == null&& User.Identity.IsAuthenticated)
+            {
+                id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
+
             ProfilePageVM user = await _appUserService.GetByIdProfilePage(id);
 
             if (user.Id == User.FindFirstValue(ClaimTypes.NameIdentifier))
             {
                 user.IsMe = true;
-            }
-            else
-            {
-                user.IsMe= false;
             }
 
             return View(user);
@@ -88,10 +91,9 @@ namespace EBlog.IO.Controllers
                 {
                     return Redirect(returnUrl);
                 }
-
-                if (!result.Succeeded)
+                else 
                 {
-                    return View("NotActiveUser");
+                    ModelState.AddModelError("", "E-mail address or password incorrect");
                 }
             }
             return View();
@@ -105,9 +107,9 @@ namespace EBlog.IO.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> UpdateUser()
+        public async Task<IActionResult> UpdateUser(string id)
         {
-            var user = await _appUserService.GetById(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var user = await _appUserService.GetById(id);
 
             return View(user);
         }
@@ -115,14 +117,35 @@ namespace EBlog.IO.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateUser(UpdateProfileDTO model)
         {
-            await _appUserService.UpdateUser(model);
-            //var user = await _appUserService.GetById(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            return RedirectToAction("Index", "Home");
+            if(model.Password is null || model.ConfirmPassword is null)
+            {
+                ModelState.AddModelError("", "Please enter your password, twice");
+                return View(model);
+            };
 
+            var result = await _appUserService.UpdateUser(model);
+            if (!result.Succeeded)
+            {
+                return RedirectToAction("UpdateUser", new { id = model.Id });
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+                return View(model);
+            }
         }
 
         [HttpGet]
         public IActionResult CreateRole()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult UpdateRole()
         {
             return View();
         }
@@ -137,11 +160,20 @@ namespace EBlog.IO.Controllers
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("GetRoles", "User",model);
                 }
             }
             return View(model);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetRoles()
+        {
+            var roles  = await _appUserService.GetRoles();
+            //return View(roles);
+            return View("GetRoles", roles);
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> MakeUserPassive(string id)
@@ -149,6 +181,5 @@ namespace EBlog.IO.Controllers
             await _appUserService.MakeUserPassive(id);
             return RedirectToAction("Index");
         }
-
     }
 }

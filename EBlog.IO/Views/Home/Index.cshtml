@@ -49,36 +49,36 @@
                 </table>
             </div>
             <div class="row row-cols-1 row-cols-md-2 g-4">
-                @foreach (var a in Model.Articles)
+                @foreach (var article in Model.Articles)
                 {
                     <div class="col">
                         <div class="card" style="max-height:150px">
                             @* <img src="..." class="card-img-top" alt="..."> *@
-                            <div class="card-body" style="cursor:pointer" onclick="location.href = '@Url.Action("Read","Article",new {id =a.Id})'">
-                                <h5 class="card-title"><b>@a.Title</b></h5>
-                                @if (a.Content.Length > 120)
+                            <div class="card-body" style="cursor:pointer" onclick="location.href = '@Url.Action("Read","Article",new {id =article.Id})'">
+                                <h5 class="card-title"><b>@article.Title</b></h5>
+                                @if (article.Content.Length > 120)
                                 {
-                                    <p class="card-text">@Html.Raw(a.Content.Substring(0, 120) + "...")</p>
+                                    <p class="card-text">@Html.Raw(article.Content.Substring(0, 120) + "...")</p>
                                 }
                                 else
                                 {
-                                    var l = a.Content.Length;
-                                    <p class="card-text">@Html.Raw(a.Content.Substring(0, l))</p>
+                                    var l = article.Content.Length;
+                                    <p class="card-text">@Html.Raw(article.Content.Substring(0, l))</p>
 
                                 }
                             </div>
                             <div class="card-footer">
-                                <img src="~/lib/img/Liked.png" style="width:15px" />
-                                <a>@a.LikeCount</a>
+                                <img src="~/lib/img/Like.png" style="width:15px" />
+                                <a>@article.LikeCount</a>
                                 <a> | </a>
                                 <img src="~/lib/img/Comment.png" style="width:20px" />
-                                <a>@a.CommentCount</a>
+                                <a>@article.CommentCount</a>
                                 <a> | </a>
-                                <a>@a.CreateDate.ToString("dd.MM.yyyy")</a>
+                                <a>@article.CreateDate.ToString("dd.MM.yyyy")</a>
                                 <a> | </a>
-                                <a style="cursor:pointer" onclick="location.href = '@Url.Action("Index","Home",new {page = 1, genreId = a.GenreId,filter = 0})'">@a.GenreName</a>
+                                <a style="cursor:pointer" onclick="location.href = '@Url.Action("Index","Home",new {page = 1, genreId = article.GenreId,filter = 0})'">@article.GenreName</a>
                                 <a> | </a>
-                                <a style ="cursor:pointer" onclick="location.href = '@Url.Action("ProfilePage", "User", new {id = a.UserId})'">@a.AuthorFullName</a>
+                                <a style="cursor:pointer" onclick="location.href = '@Url.Action("ProfilePage", "User", new {id = article.UserId})'">@article.AuthorFullName</a>
                             </div>
                         </div>
                     </div>

@@ -8,66 +8,66 @@
 <div class="container">
     <div class="row">
         <div class="col-md-2">
-            <table class="table table-bordered">
-                <tr>
-                    <td>
-                        <img src="" style="height:150px" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a>@Model.UserName</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a>@Model.FullName</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a>@Model.PhoneNumber</a>
-                    </td>
-                </tr>
+            <img src="" style="height:150px" />
+            <hr />
 
-            </table>
-            @if (Model.IsMe is true)
+            <a><b>Name</b></a>
+            <br />
+            <a>@Model.FullName</a>
+            <hr />
+
+            <a><b>UserName</b></a>
+            <br />
+            <a>@Model.UserName</a>
+            <hr />
+
+            <a><b>PhoneNumber</b></a>
+            <br />
+            <a>@Model.PhoneNumber</a>
+            <hr />
+
+            <a><b>Articles</b></a>
+            <br />
+            <a>@Model.Articles.Count()</a>
+            <hr />
+
+            @if (Model.IsMe is true || User.Identity.IsAuthenticated)
             {
-                <a>Edit My Profile</a>
+                <a style="cursor:pointer" onclick="location.href = '@Url.Action("UpdateUser","User", new{id = Model.Id})'">Edit My Profile</a>
             }
         </div>
         <div class="col-md-10">
             <div class="row row-cols-1 row-cols-md-2 g-4">
-                @foreach (var a in Model.Articles)
+                @foreach (var articles in Model.Articles)
                 {
                     <div class="col">
                         <div class="card" style="max-height:150px">
                             @* <img src="..." class="card-img-top" alt="..."> *@
-                            <div class="card-body" style="cursor:pointer" onclick="location.href = '@Url.Action("Read","Article",new {id =a.Id})'">
-                                <h5 class="card-title"><b>@a.Title</b></h5>
-                                @if (a.Content.Length > 120)
+                            <div class="card-body" style="cursor:pointer" onclick="location.href = '@Url.Action("Read","Article",new {id =articles.Id})'">
+                                <h5 class="card-title"><b>@articles.Title</b></h5>
+                                @if (articles.Content.Length > 120)
                                 {
-                                    <p class="card-text">@Html.Raw(a.Content.Substring(0, 120) + "...")</p>
+                                    <p class="card-text">@Html.Raw(articles.Content.Substring(0, 120) + "...")</p>
                                 }
                                 else
                                 {
-                                    var l = a.Content.Length;
-                                    <p class="card-text">@Html.Raw(a.Content.Substring(0, l))</p>
+                                    var l = articles.Content.Length;
+                                    <p class="card-text">@Html.Raw(articles.Content.Substring(0, l))</p>
 
                                 }
                             </div>
                             <div class="card-footer">
                                 <img src="~/lib/img/Liked.png" style="width:15px" />
-                                <a>@a.LikeCount</a>
+                                <a>@articles.LikeCount</a>
                                 <a> | </a>
                                 <img src="~/lib/img/Comment.png" style="width:20px" />
-                                <a>@a.CommentCount</a>
+                                <a>@articles.CommentCount</a>
                                 <a> | </a>
-                                <a>@a.CreateDate.ToString("dd.MM.yyyy")</a>
+                                <a>@articles.CreateDate.ToString("dd.MM.yyyy")</a>
                                 <a> | </a>
-                                <a>@a.GenreName</a>
+                                <a>@articles.GenreName</a>
                                 <a> | </a>
-                                <a>@a.AuthorFullName</a>
+                                <a>@articles.AuthorFullName</a>
                             </div>
                         </div>
                     </div>

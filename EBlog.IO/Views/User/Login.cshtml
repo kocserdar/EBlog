@@ -5,40 +5,27 @@
     ViewData["Title"] = "Login";
 }
 
-<h1>Login</h1>
+<div class="row">
+    <div class="col-md-4 mx-auto">
+        <form asp-action="Login">
+            <div class="form-floating"><h3>Login</h3></div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" asp-for="UserName">
+                <label asp-for="UserName"></label>
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" asp-for="Password">
+                <label asp-for="Password"></label>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Login" class="btn btn-secondary" />
+                <input type="submit" asp-action="Register" value="Register" class="btn btn-primary" />
+            </div>
 
-<hr />
-<div class="login-box">
-    <div class="card">
-        <div class="card-body login-card-body">
-            <form asp-action="Login">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    
-                <div class="form-group">
-                    <label asp-for="UserName" class="control-label"></label>
-                    <input asp-for="UserName" class="form-control" />
-                    <span asp-validation-for="UserName" class="text-danger"></span>
-                </div>
-                
-                <div class="form-group">
-                    <label asp-for="Password" class="control-label"></label>
-                    <input asp-for="Password" class="form-control" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-                
-                <div class="row">
-                    <input type="submit" value="Login" class="btn btn-primary" />
-                </div>
-            </form>
-        </div>
+        </form>
     </div>
 </div>
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}

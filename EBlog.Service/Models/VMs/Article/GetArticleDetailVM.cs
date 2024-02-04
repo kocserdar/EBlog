@@ -27,5 +27,7 @@ namespace EBlog.Service.Models.VMs.Article
         public List<GetCommentVM>? CommentList { get; set; }
 
         public List<GetLikeVM>? LikeList { get; set; }
+
+        public string Slug { get; set; }
     }
 }

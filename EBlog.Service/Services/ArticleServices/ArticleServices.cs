@@ -27,6 +27,7 @@ namespace EBlog.Service.Services.ArticleServices
             var article = _unitOfWorks.Mapper.Map<Article>(model);
             article.Status = Core.Enums.Status.Active;
             article.CreatedAt = DateTime.Now;
+            article.Slug = EBlog.Core.Helpers.Normalization.TurkishToEnglish(article.Title);
             await _unitOfWorks.ArticleRepo.Create(article);
 
         }
@@ -54,6 +55,7 @@ namespace EBlog.Service.Services.ArticleServices
                     GenreId = x.GenreId,
                     GenreName = x.Genre.Name,
                     AppUserId = x.AppUser.Id,
+                    Slug = x.Slug,
                     LikeList = x.Likes.Where(x => x.ArticleId == id)
                                                     .Select(x => new Models.VMs.Like.GetLikeVM
                                                     {
@@ -81,6 +83,53 @@ namespace EBlog.Service.Services.ArticleServices
             return article;
         }
 
+        public async Task<GetArticleDetailVM> GetArticleDetailbySlug(string slug)
+        {
+            var art = await _unitOfWorks.ArticleRepo.GetBySlug(slug);
+            var id = art.Id;
+            var article = await _unitOfWorks.ArticleRepo.GetFilteredFirstOrDefault(
+                select: x => new GetArticleDetailVM
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Content = x.Content,
+                    AuthorFullName = x.AppUser.FirstName + " " + x.AppUser.LastName, //EBlog.Core.Helpers.FullName.GetFullName(x.AppUser.FirstName,x.AppUser.LastName),
+                    CommentCount = x.Comments.Where(x => x.Status != Core.Enums.Status.Passive).Count(), //.Where(x => x.Id == id).ToList()
+                    LikeCount = x.Likes.Where(x => x.Status != Core.Enums.Status.Passive).Count(),
+                    CreateDate = x.CreatedAt,
+                    GenreId = x.GenreId,
+                    GenreName = x.Genre.Name,
+                    AppUserId = x.AppUser.Id,
+                    Slug = x.Slug,
+                    LikeList = x.Likes.Where(x => x.ArticleId == id)
+                                                    .Select(x => new Models.VMs.Like.GetLikeVM
+                                                    {
+                                                        Id = x.Id,
+                                                        AppUserId = x.AppUser.Id,
+                                                        ArticleId = x.ArticleId,
+                                                        Status = x.Status
+                                                    })
+                                                    .Where(y => y.Status != Core.Enums.Status.Passive)
+                                                    .ToList(),
+                    CommentList = x.Comments.Where(x => x.ArticleId == id)
+                                                    .OrderByDescending(x => x.CreatedAt)
+                                                    .Select(x => new GetCommentVM
+                                                    {
+                                                        Id = x.Id,
+                                                        Text = x.Text,
+                                                        CreateDate = x.CreatedAt,
+                                                        UserName = x.AppUser.UserName  //x.AppUser.UserName
+                                                    })
+                                                    .ToList()
+
+                },
+                where: x => x.Slug == slug && x.Status != Core.Enums.Status.Passive,
+                join: x => x.Include(x => x.AppUser).Include(x => x.Comments).Include(x => x.Likes).Include(x => x.Genre));
+            return article;
+        }
+
+
+
         public async Task<List<GetArticleVM>> GetArticles()
         {
             var articles = await _unitOfWorks.ArticleRepo.GetFilteredList(
@@ -104,13 +153,17 @@ namespace EBlog.Service.Services.ArticleServices
 
         }
 
-        public void Update(EditArticleDTO model)
+        public async void Update(EditArticleDTO model)
         {
             if (model != null)
             {
+                //var old = await _unitOfWorks.ArticleRepo.GetById(model.ID);
+
                 var article = _unitOfWorks.Mapper.Map<Article>(model);
+                //article.CreatedAt = old.CreatedAt;
                 article.UpdatedAt = DateTime.Now;
                 article.Status = Core.Enums.Status.Updated;
+                article.Slug = EBlog.Core.Helpers.Normalization.TurkishToEnglish(article.Title);
                 _unitOfWorks.ArticleRepo.Update(article);
             }
         }

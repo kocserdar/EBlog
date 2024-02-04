@@ -21,5 +21,6 @@ namespace EBlog.Service.Services.ArticleServices
         Task<GetArticleDetailVM> GetArticleDetail(int id);
 
         Task<EditArticleDTO> GetArticle(int id);
+        Task<GetArticleDetailVM> GetArticleDetailbySlug(string slug);
     }
 }

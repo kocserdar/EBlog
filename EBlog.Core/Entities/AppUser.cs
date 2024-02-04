@@ -11,9 +11,21 @@ namespace EBlog.Core.Entities
 {
     public class AppUser:IdentityUser, IBaseEntity
     {
+        private string _ImagePath = "defaultuser_512px.png";
+
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        public string? ImagePath { get; set; }
+        public string? ImagePath 
+        {
+            get { return _ImagePath; }
+            set
+            {
+                if(value != null)
+                {
+                    _ImagePath = value;
+                }
+            } 
+        }
 
         //Implement
         public DateTime CreatedAt { get; set; }

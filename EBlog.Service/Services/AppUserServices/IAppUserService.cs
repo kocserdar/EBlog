@@ -22,5 +22,6 @@ namespace EBlog.Service.Services.AppUserServices
         Task<List<AppUserListVM>> GetAllUsers();
         Task<ProfilePageVM> GetByIdProfilePage(string id);
         Task<GetRolesVM> GetRoles();
+        Task<IdentityResult> UpdateProfilePicture(string id, string PicturePath);
     }
 }

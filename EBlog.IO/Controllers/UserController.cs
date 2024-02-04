@@ -20,12 +20,14 @@ namespace EBlog.IO.Controllers
     {
         private readonly IUnitOfWorks _unitOfWorks;
         private readonly IAppUserService _appUserService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
 
-        public UserController(IUnitOfWorks unitOfWorks, IAppUserService appUserService)
+        public UserController(IUnitOfWorks unitOfWorks, IAppUserService appUserService, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWorks = unitOfWorks;
             _appUserService = appUserService;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<IActionResult> Index()
@@ -35,7 +37,7 @@ namespace EBlog.IO.Controllers
 
         public async Task<IActionResult> ProfilePage(string id)
         {
-            if(id == null&& User.Identity.IsAuthenticated)
+            if (id == null && User.Identity.IsAuthenticated)
             {
                 id = User.FindFirstValue(ClaimTypes.NameIdentifier);
             }
@@ -59,6 +61,17 @@ namespace EBlog.IO.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterDTO model)
         {
+            var Roles = await _appUserService.GetRoles();
+
+            if (Roles.Roles.Count == 0)
+            {
+                CreateRoleDTO defaultRole = new CreateRoleDTO();
+                defaultRole.Name = "Normal";
+                CreateRoleDTO defaultRoleAdmin = new CreateRoleDTO();
+                defaultRoleAdmin.Name = "Admin";
+                await _appUserService.CreateRole(defaultRoleAdmin);
+                await _appUserService.CreateRole(defaultRole);
+            }
             if (ModelState.IsValid)
             {
                 var result = await _appUserService.Register(model);
@@ -91,7 +104,7 @@ namespace EBlog.IO.Controllers
                 {
                     return Redirect(returnUrl);
                 }
-                else 
+                else
                 {
                     ModelState.AddModelError("", "E-mail address or password incorrect");
                 }
@@ -117,7 +130,7 @@ namespace EBlog.IO.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateUser(UpdateProfileDTO model)
         {
-            if(model.Password is null || model.ConfirmPassword is null)
+            if (model.Password is null || model.ConfirmPassword is null)
             {
                 ModelState.AddModelError("", "Please enter your password, twice");
                 return View(model);
@@ -160,7 +173,7 @@ namespace EBlog.IO.Controllers
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("GetRoles", "User",model);
+                    return RedirectToAction("GetRoles", "User", model);
                 }
             }
             return View(model);
@@ -169,7 +182,7 @@ namespace EBlog.IO.Controllers
         [HttpGet]
         public async Task<IActionResult> GetRoles()
         {
-            var roles  = await _appUserService.GetRoles();
+            var roles = await _appUserService.GetRoles();
             //return View(roles);
             return View("GetRoles", roles);
         }
@@ -181,5 +194,20 @@ namespace EBlog.IO.Controllers
             await _appUserService.MakeUserPassive(id);
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateProfilePicture(IFormFile profilePicture, string id)
+        {
+            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "img");
+            string fileName = Guid.NewGuid().ToString().Substring(0, 4) + "-" + Path.GetFileName(profilePicture.FileName);
+            string filePath = Path.Combine(uploadPath, fileName);
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                profilePicture.CopyTo(fileStream);
+            }
+            await _appUserService.UpdateProfilePicture(id, fileName);
+            return RedirectToAction("UpdateUser", new { id = id });
+        }
+
     }
 }

@@ -23,12 +23,6 @@ namespace EBlog.Repo.Concretes
             _table = _appDbContext.Set<Article>();
         }
 
-        //public Task<List<Article>> GetArticlesPaged(int pageNumber)
-        //{
-
-        //    throw new NotImplementedException();
-        //}
-
         public async Task<List<TResult>> GetArticlesListPaged<TResult>(
             Expression<Func<Article, TResult>> select, 
             Expression<Func<Article, bool>> where = null, 
@@ -54,6 +48,11 @@ namespace EBlog.Repo.Concretes
             {
                 return await query.Select(select).ToListAsync();
             }
+        }
+
+        public async Task<Article> GetBySlug(string slug)
+        {
+            return await _table.FirstAsync(x => x.Slug == slug);
         }
     }
 }

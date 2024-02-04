@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EBlog.Repo.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231223224230_initialCatalog")]
-    partial class initialCatalog
+    [Migration("20240204203053_AddImagePath")]
+    partial class AddImagePath
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,7 +37,9 @@ namespace EBlog.Repo.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2024, 2, 4, 23, 30, 53, 525, DateTimeKind.Local).AddTicks(7825));
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -135,6 +137,10 @@ namespace EBlog.Repo.Migrations
 
                     b.Property<DateTime?>("PassivedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");

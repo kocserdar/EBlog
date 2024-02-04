@@ -8,17 +8,17 @@ namespace EBlog.Core.Helpers
 {
     public static class Normalization
     {
-        public static string TurkishToEnglish(string charcter)
+        public static string TurkishToEnglish(string character)
         {
-            string turkishCharcter = "ığüşöç ";
-            string englishCharcter = "igusoc-";
+            string turkishCharacter = "ığüşöç ";
+            string englishCharacter = "igusoc-";
 
-            for (int i = 0; i < turkishCharcter.Length; i++)
+            for (int i = 0; i < turkishCharacter.Length; i++)
             {
-                charcter = charcter.ToLower().Replace(turkishCharcter[i], englishCharcter[i]);
+                character = character.ToLower().Replace(turkishCharacter[i], englishCharacter[i]);
             }
-
-            return charcter;
+            character = character + "_" + Guid.NewGuid().ToString().Substring(0,4);
+            return character;
         }
     }
 }

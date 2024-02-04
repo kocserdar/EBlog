@@ -6,6 +6,9 @@
 
 <h1 class="col-md-4 mx-auto">Update Your Profile</h1>
 
+
+
+
 <div class="row">
     <div class="col-md-4 mx-auto">
         <form asp-action="UpdateUser">
@@ -49,18 +52,12 @@
             </div>
         </form>
         <br />
-        <form asp-action="UploadImage" method="post" enctype="multipart/form-data">
+        <img src="/img/@Model.ImagePath" style="height:150px" />
+        <form asp-action="UpdateProfilePicture" asp-controller="User" method="post" enctype="multipart/form-data">
             <label asp-for="ImagePath"></label>
-            <input class="form-control" type="file" name="imageFile" /><br />
+            <input type="hidden" name="id" value="@Model.Id" />
+            <input class="form-control" type="file" name="profilePicture" accept="image/*" /><br />
             <button class="btn btn-secondary" type="submit">Upload Image</button>
         </form>
     </div>
-</div>
-
-
-
-
-<div class="mb-3">
-    <label for="formFile" class="form-label">Default file input example</label>
-    <input class="form-control" type="file" id="formFile">
 </div>

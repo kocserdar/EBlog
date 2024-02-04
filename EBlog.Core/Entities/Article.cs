@@ -13,6 +13,7 @@ namespace EBlog.Core.Entities
         public int Id { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
+        public string Slug { get; set; }
 
         //Implement
         public DateTime CreatedAt { get; set; }
@@ -29,5 +30,6 @@ namespace EBlog.Core.Entities
 
         public virtual List<Comment> Comments { get; set; }
         public virtual List<Like> Likes { get; set; }
+
     }
 }

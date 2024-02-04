@@ -1,10 +1,8 @@
-﻿using EBlog.Core.Entities;
-using EBlog.Service.Models.DTOs.Article;
+﻿using EBlog.Service.Models.DTOs.Article;
 using EBlog.Service.Services.ArticleServices;
 using EBlog.Service.Services.GenreServices;
 using EBlog.Service.Utilities.UnitOfWorks;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using System.Security.Claims;
 
 namespace EBlog.IO.Controllers
@@ -60,9 +58,28 @@ namespace EBlog.IO.Controllers
                 article.IsLiked = article.LikeList.Where(x => x.ArticleId == id).Select(x => x.AppUserId).ToList().Contains(userId);
                 article.IsMine = article.AppUserId == userId ? true : false;
             }
+            var slug = article.Slug;
+            //return View(article);
+            return RedirectToAction("ReadbySlug", new { slug });
 
-            return View(article);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ReadbySlug(string slug)
+        {
+            var article = await _articleServices.GetArticleDetailbySlug(slug);
+            var id = article.Id;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (User.Identity.IsAuthenticated)
+            {
+                article.IsLiked = article.LikeList.Where(x => x.ArticleId == id).Select(x => x.AppUserId).ToList().Contains(userId);
+                article.IsMine = article.AppUserId == userId ? true : false;
+            }
+            return View(article);
+
+        }
+
+
 
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
@@ -81,7 +98,7 @@ namespace EBlog.IO.Controllers
             article.AppUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return View(article);
             //return RedirectToAction($"/articles/{id}");
-            return RedirectToAction("Index", "Article");
+            //return RedirectToAction("Index", "Article");
         }
 
         [HttpPost]

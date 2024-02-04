@@ -8,9 +8,8 @@
 <div class="container">
     <div class="row">
         <div class="col-md-2">
-            <img src="" style="height:150px" />
+            <img src="/img/@Model.ImagePath" style="height:auto; width:100%" />
             <hr />
-
             <a><b>Name</b></a>
             <br />
             <a>@Model.FullName</a>
@@ -31,7 +30,7 @@
             <a>@Model.Articles.Count()</a>
             <hr />
 
-            @if (Model.IsMe is true || User.Identity.IsAuthenticated)
+            @if (Model.IsMe is true || User.IsInRole("Admin"))
             {
                 <a style="cursor:pointer" onclick="location.href = '@Url.Action("UpdateUser","User", new{id = Model.Id})'">Edit My Profile</a>
             }

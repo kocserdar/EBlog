@@ -1,0 +1,128 @@
+﻿@using EBlog.Service.Models.VMs.Article
+@model GetArticleDetailVM
+
+@{
+    ViewData["Title"] = "Read Article";
+}
+
+<div>
+    <h2>
+        <b>@Html.DisplayFor(model => model.Title)</b>
+    </h2>
+</div>
+<hr />
+@if (Model.IsMine is true)
+{
+    <span style="cursor:pointer">
+        <a onclick="location.href = '@Url.Action("Edit","Article",new {id = Model.Id})'">Edit your article</a>
+    </span>
+    <a> | </a>
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    @if (Model.IsLiked is true)
+    {
+        <span style="cursor:pointer">
+            <a onclick="location.href ='@Url.Action("Delete","Like",new{ Id = Model.Id})'">
+                <img src="~/lib/img/Liked.png" style="width:20px" />
+                <a>@Html.DisplayFor(model => model.LikeCount)</a>
+            </a>
+        </span>
+    }
+    else
+    {
+        <span style="cursor:pointer">
+            <a onclick="location.href ='@Url.Action("Create","Like",new{ id = Model.Id})'">
+                <img src="~/lib/img/Like.png" style="width:20px" />
+                <a>@Html.DisplayFor(model => model.LikeCount)</a>
+            </a>
+        </span>
+    }
+
+}
+else
+{
+    <span style="cursor:pointer">
+        <a onclick="location.href ='@Url.Action("Login","User",new{ id = Model.Id})'">
+            <img src="~/lib/img/Like.png" style="width:20px" />
+            <a>@Html.DisplayFor(model => model.LikeCount)</a>
+        </a>
+    </span>
+
+}
+
+
+
+<a> | </a>
+
+<span>
+    <img src="~/lib/img/Comment.png" style="width:20px" />
+    <a>@Html.DisplayFor(model => model.CommentCount)</a>
+</span>
+
+<a> | </a>
+
+<span>
+    <a>@Model.CreateDate.ToString("dd.MM.yyyy")</a>
+</span>
+
+<a> | </a>
+
+<span>
+    <a style="cursor:pointer" onclick="location.href = '@Url.Action("Index","Home",new {page = 1, genreId = Model.GenreId,filter = 0})'">@Model.GenreName</a>
+</span>
+
+
+@* <span style="cursor:pointer">
+    <a onclick="location.href = '@Url.Action("Edit", "Article", new { id = Model.Id })'">Comment</a>
+    <a>@Html.DisplayFor(model => model.CommentCount)</a>
+    </span> *@
+
+<a> | </a>
+<hr />
+
+<div>
+    <span>
+        @* <p style="text-align:justify">@Html.DisplayFor(model => model.Content)</p> *@
+        <p style="text-align:justify">@Html.Raw(Model.Content)</p>
+    </span>
+</div>
+<hr />
+
+<div class="col-6">
+    <a><b>Comments</b></a>
+    <hr />
+    @foreach (var comment in Model.CommentList)
+    {
+
+        ;
+        <div style="border:solid;border-color:lightgrey;border-radius:15px;border-width:2px">
+
+            <p style="text-align:justify;margin:5px">@comment.Text</p>
+            <a style="margin:5px">@comment.UserName</a><a> | </a><a>@comment.CreateDate.ToString("dd.MM.yyyy")</a>
+
+        </div>
+        <hr />
+    }
+    <form method="get" action="@Url.Action("Create","Comment")">
+        <label class="col-12"><b>Leave a Comment</b></label>
+        <textarea name="usercommenttext" placeholder="Make us learn, make us laugh, make us think!" class="col-12" style="border:solid;border-color:lightgrey;border-radius:15px;border-width:2px"></textarea>
+        <input type="hidden" name="AppUserId" value="@Model.AppUserId" />
+        <input type="hidden" name="ArticleId" value="@Model.Id" />
+        @if (User.Identity.IsAuthenticated)
+        {
+            <button class="btn-secondary" type="submit">Save Comment</button>
+        }
+        else
+        {
+            <button class="btn-secondary" type="submit" asp-action="Login" asp-controller="User">Login to comment</button>
+        }
+        <hr />
+    </form>
+
+</div>
+
+
+
+@* ; text-decoration: underline; *@

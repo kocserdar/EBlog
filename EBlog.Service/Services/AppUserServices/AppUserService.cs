@@ -1,23 +1,12 @@
 ﻿using EBlog.Core.Entities;
 using EBlog.Core.Enums;
-using EBlog.Repo.Interfaces;
 using EBlog.Service.Models.DTOs.AppUser;
 using EBlog.Service.Models.VMs.AppUser;
 using EBlog.Service.Models.VMs.Article;
 using EBlog.Service.Models.VMs.Genre;
-using EBlog.Service.Models.VMs.Like;
 using EBlog.Service.Utilities.UnitOfWorks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace EBlog.Service.Services.AppUserServices
 {
@@ -63,7 +52,7 @@ namespace EBlog.Service.Services.AppUserServices
                 }
                 else
                 {
-                    var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
+                    var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
                     return result;
                 }
             }
@@ -79,7 +68,7 @@ namespace EBlog.Service.Services.AppUserServices
             var user = _unitOfWorks.Mapper.Map<AppUser>(model);
             user.Email = model.UserName;
             user.CreatedAt = DateTime.Now;
-
+            user.PasswordHash = _passwordHasher.HashPassword(user, model.Password);
 
             var result = await _userManager.CreateAsync(user);
             await _userManager.AddToRoleAsync(user, "Normal");
@@ -101,8 +90,18 @@ namespace EBlog.Service.Services.AppUserServices
             user.LastName = model.LastName;
             user.UserName = model.UserName;
             user.PhoneNumber = model.PhoneNumber;
-            user.ImagePath = model.ImagePath;
             user.PasswordHash = _passwordHasher.HashPassword(user, model.Password);
+            var result = await _userManager.UpdateAsync(user);
+            return result;
+
+        }
+
+        public async Task<IdentityResult> UpdateProfilePicture(string id, string PicturePath)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            user.Status = Status.Updated;
+            user.UpdatedAt = DateTime.Now;
+            user.ImagePath = PicturePath;
             var result = await _userManager.UpdateAsync(user);
             return result;
 
@@ -124,7 +123,6 @@ namespace EBlog.Service.Services.AppUserServices
             var result = await _userManager.UpdateAsync(user);
             return result;
         }
-
 
         public async Task<IdentityResult> CreateRole(CreateRoleDTO model)
         {
@@ -206,32 +204,5 @@ namespace EBlog.Service.Services.AppUserServices
             model.Roles = await _rolemanager.Roles.ToListAsync();
             return model;
         }
-
-
-        //public async Task<AppUser> GetAllUserInfo(string userId)
-        //{
-        //    /*EBlog.Core.Helpers.FullName.GetFullName(x.AppUser.FirstName,x.AppUser.LastName),*/
-        //    var user = await _appUserRepo.GetFilteredFirstOrDefault(
-        //        select: x => new ProfilePageVM
-        //        {
-        //            FirstName = x.FirstName,
-        //            LastName = x.LastName,
-        //            UserName = x.UserName,
-        //            ImagePath = x.ImagePath,
-        //            FullName = EBlog.Core.Helpers.FullName.GetFullName(x.FirstName, x.LastName),
-        //            PhoneNumber = x.PhoneNumber,
-        //            Articles = x.Articles.Where(x => x.AppUserId == userId)
-        //                                            .Select(x => new Models.VMs.Article.GetArticleVM
-        //                                            {
-        //                                                Content = x.Content,
-        //                                                CreateDate = x.CreatedAt,
-        //                                                Title = x.Title,
-        //                                                Id = x.Id
-        //                                            }
-        //                                            .ToList(),
-        //             Comments = 
-        //        }
-        //        );
-        //}
     }
 }

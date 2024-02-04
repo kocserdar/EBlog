@@ -20,5 +20,7 @@ namespace EBlog.Repo.Interfaces
             int skip = 0,
             int take = 10
             );
+
+        Task<Article> GetBySlug(string slug);
     }
 }

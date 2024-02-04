@@ -90,8 +90,8 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
         name: "Article",
-        pattern: "Article/Read/{id?}",
-        defaults: new { controller = "Article", action = "Read" }
+        pattern: "Article/ReadbySlug/{slug?}",
+        defaults: new { controller = "Article", action = "ReadbySlug" }
     );
 
     endpoints.MapControllerRoute(

@@ -12,6 +12,7 @@
     @* local *@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/EBlog.IO.styles.css" asp-append-version="true" />
+    <link rel="icon" type="image/x-icon" href="~/img/FavIcon_48px.png" />
 
 </head>
 <body>
@@ -83,9 +84,14 @@
                         }
                         <li>
                             <form class="d-flex" role="search">
-                                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                                <button class="btn btn-outline-secondary" type="submit">Search</button>
+                                <input class="form-control me-2" type="text" placeholder="Search" aria-label="Search" id="searchInput">
+                                @* <button class="btn btn-outline-secondary" type="submit" id="openModalButton">Search</button> *@
+                                <div id="searchResults" style="display: none;"></div>
                             </form>
+                            <div id="searchResultsModal" class="modal">
+                                <span class="close" id="closeModal">&times;</span>
+                                <div id="modalContent"></div>
+                            </div>
                         </li>
 
                     </ul>
@@ -114,6 +120,53 @@
 
     @* local *@
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+
+    @* <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> *@
+    <script>
+        $(document).ready(function () {
+            $("#searchInput").on("input", function () {
+                var query = $(this).val();
+                if (query.length > 0) {
+                    $.ajax({
+                        url: "/Home/Search", // HomeController'ınıza uygun URL
+                        type: "POST",
+                        data: { query: query },
+                        success: function (result) {
+                            displayModal(result);
+                            // $("#searchResults").html(result);
+                            // $("#searchResults").show();
+                        }
+                    });
+                } else {
+                    // $("#searchResults").hide();
+                    $("#searchResultsModal").hide();
+                }
+            });
+            $("#openModalButton").click(function () {
+                var query = $("#searchInput").val();
+
+                if (query.length > 0) {
+                    $.ajax({
+                        url: "/Home/Search",
+                        type: "POST",
+                        data: { query: query },
+                        success: function (result) {
+                            displayModal(result);
+                        }
+                    });
+                }
+            });
+            $("#closeModal").click(function () {
+                $("#searchResultsModal").hide();
+            });
+
+            function displayModal(content) {
+                $("#modalContent").html(content);
+                $("#searchResultsModal").show();
+            }
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -9,6 +9,6 @@ namespace EBlog.Repo.Interfaces
 {
     public interface IGenreRepo:IBaseRepo<Genre>
     {
-
+        Task<List<Genre>> Search(string query);
     }
 }

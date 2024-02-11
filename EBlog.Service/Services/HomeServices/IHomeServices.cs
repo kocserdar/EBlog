@@ -11,5 +11,7 @@ namespace EBlog.Service.Services.HomeServices
     {
         Task<HomePageVM> GetAll(int page, int genreId, int filter);
 
+        Task<SearchResultVM> Search(string query);
+
     }
 }

@@ -157,10 +157,7 @@ namespace EBlog.Service.Services.ArticleServices
         {
             if (model != null)
             {
-                //var old = await _unitOfWorks.ArticleRepo.GetById(model.ID);
-
                 var article = _unitOfWorks.Mapper.Map<Article>(model);
-                //article.CreatedAt = old.CreatedAt;
                 article.UpdatedAt = DateTime.Now;
                 article.Status = Core.Enums.Status.Updated;
                 article.Slug = EBlog.Core.Helpers.Normalization.TurkishToEnglish(article.Title);

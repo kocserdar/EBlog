@@ -5,6 +5,7 @@ using EBlog.Service.Services.HomeServices;
 using EBlog.Service.Utilities.UnitOfWorks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Security.Claims;
 
@@ -37,8 +38,25 @@ namespace EBlog.IO.Controllers
             return View(await _homeServices.GetAll(page, genreId, filter));
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Search(string query)
+        {
+            Console.WriteLine(query);
+            if(query is null)
+            {
+                return PartialView("_SearchResults", new SearchResultVM());
+            }
+            else
+            {
+                var lowercasedQuery = query.ToLower();
+                var searchResults = await _homeServices.Search(lowercasedQuery);
+
+                return PartialView("_SearchResults", searchResults);
+            }
+        }
+
         public IActionResult Privacy()
-        { 
+        {
             return View();
         }
 

@@ -16,7 +16,7 @@ namespace EBlog.Core.Entities
         public string Slug { get; set; }
 
         //Implement
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; }
         public DateTime? PassivedAt { get; set; }
         public Status Status { get; set; }

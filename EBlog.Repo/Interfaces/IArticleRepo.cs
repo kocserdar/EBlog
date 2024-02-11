@@ -22,5 +22,6 @@ namespace EBlog.Repo.Interfaces
             );
 
         Task<Article> GetBySlug(string slug);
+        Task<List<Article>> Search(string query);
     }
 }

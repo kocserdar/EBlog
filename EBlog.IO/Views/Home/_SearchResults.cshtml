@@ -1,0 +1,30 @@
+﻿@using EBlog.Service.Models.VMs.Home;
+@model SearchResultVM
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+<h4>People</h4>
+@foreach (var item in Model.Users)
+{
+
+    <a style="cursor:pointer" onclick="location.href = '@Url.Action("ProfilePage", "User", new {id = item.Id})'">@item.FirstName @item.LastName</a>
+    <br />
+}
+<hr />
+<h4>Genres</h4>
+@foreach (var item in Model.Genres)
+{
+    <a style="cursor:pointer" onclick="location.href = '@Url.Action("Index", "Home", new {page = 1, filter = 0, genreId = item.Id })'">@item.Name</a>
+    <br />
+}
+<hr />
+<h4>Articles</h4>
+@foreach (var item in Model.Articles)
+{
+    <a style="cursor:pointer" onclick="location.href = '@Url.Action("ReadbySlug", "Article", new {slug = item.Slug})'">@item.Title</a>
+    <br />
+}
+<hr />
+

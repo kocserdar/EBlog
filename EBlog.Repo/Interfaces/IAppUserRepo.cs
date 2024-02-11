@@ -9,6 +9,6 @@ namespace EBlog.Repo.Interfaces
 {
     public interface IAppUserRepo:IBaseRepo<AppUser>
     {
-
+        Task<List<AppUser>> Search(string query);
     }
 }

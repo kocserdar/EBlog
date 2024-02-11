@@ -52,13 +52,13 @@
                 @foreach (var article in Model.Articles)
                 {
                     <div class="col">
-                        <div class="card" style="max-height:150px">
+                        <div class="card" style="height:150px">
                             @* <img src="..." class="card-img-top" alt="..."> *@
                             <div class="card-body" style="cursor:pointer" onclick="location.href = '@Url.Action("Read","Article",new {id =article.Id})'">
                                 <h5 class="card-title"><b>@article.Title</b></h5>
-                                @if (article.Content.Length > 120)
+                                @if (article.Content.Length > 50)
                                 {
-                                    <p class="card-text">@Html.Raw(article.Content.Substring(0, 120) + "...")</p>
+                                    <p class="card-text">@Html.Raw(article.Content.Substring(0, 50) + "...")</p>
                                 }
                                 else
                                 {

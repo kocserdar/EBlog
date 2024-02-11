@@ -23,6 +23,12 @@ namespace EBlog.Repo.Concretes
             _table = _appDbContext.Set<Article>();
         }
 
+        public async Task<List<Article>> Search(string query)
+        {
+            return await _appDbContext.Articles.Where(x => x.Status != Core.Enums.Status.Passive && x.Content.ToLower().Contains(query) || x.Title.ToLower().Contains(query)).ToListAsync();
+        }
+
+
         public async Task<List<TResult>> GetArticlesListPaged<TResult>(
             Expression<Func<Article, TResult>> select, 
             Expression<Func<Article, bool>> where = null, 

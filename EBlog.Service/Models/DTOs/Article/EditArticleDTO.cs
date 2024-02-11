@@ -17,6 +17,8 @@ namespace EBlog.Service.Models.DTOs.Article
 
         public int GenreId { get; set; }
 
+        public DateTime CreatedAt { get; set; }
+
         public List<GetGenreVM>? Genres { get; set; }
 
         public string AppUserId { get; set; }

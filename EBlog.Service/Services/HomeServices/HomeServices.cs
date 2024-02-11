@@ -24,6 +24,17 @@ namespace EBlog.Service.Services.HomeServices
             _unitOfWorks = unitOfWorks;
         }
 
+        public async Task<SearchResultVM> Search(string query)
+        {
+            await Console.Out.WriteLineAsync("burası servis" + query);
+            SearchResultVM searchResultVM = new SearchResultVM();
+            searchResultVM.Articles = await _unitOfWorks.ArticleRepo.Search(query);
+            searchResultVM.Genres = await _unitOfWorks.GenreRepo.Search(query);
+            searchResultVM.Users = await _unitOfWorks.AppUserRepo.Search(query);
+            return searchResultVM;
+        }
+
+
         public async Task<HomePageVM> GetAll(int page, int genreId, int filter)
         {
 

@@ -92,8 +92,8 @@ namespace EBlog.Repo.Concretes
 
         public void Update(T entity)
         {
-            _appDbContext.Entry<T>(entity).State = EntityState.Modified;
-            _appDbContext.Update(entity);
+             _appDbContext.Entry<T>(entity).State = EntityState.Modified;
+             //_appDbContext.Update(entity);
             _appDbContext.SaveChanges();
         }
     }

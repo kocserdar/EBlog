@@ -1,4 +1,4 @@
-# Proje Adı
+# EBlog
 
 Bu proje, Serdar Koç tarafından geliştirilmiş bir ASP.NET Core MVC uygulamasıdır.
 
@@ -16,3 +16,23 @@ Bu proje, MVC mimarisi, SOLID prensipleri, Fluent API kullanımı ve ASP.NET Cor
 - Temel CRUD işlemleri
 - Rol tabanlı yetkilendirme (Admin, User)
 - Arama işlevselliği
+
+
+# EBlog
+
+This project is an ASP.NET Core MVC application developed by Serdar Koç.
+
+## About
+
+This project is a web application developed using MVC architecture, SOLID principles, Fluent API, and ASP.NET Core Identity. The project follows the Onion Architecture structure and provides basic CRUD operations, user management, role-based authorization, and search functionality.
+
+## Features
+
+- Built on MVC Architecture
+- Adheres to SOLID Principles
+- Utilizes Fluent API
+- User management with ASP.NET Core Identity
+- Follows Onion Architecture structure
+- Basic CRUD operations
+- Role-based authorization (Admin, User)
+- Search functionality

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using System;
@@ -63,6 +64,7 @@ namespace EBlog.IO.Controllers
         {
             var Roles = await _appUserService.GetRoles();
 
+            //Only for first start
             if (Roles.Roles.Count == 0)
             {
                 CreateRoleDTO defaultRole = new CreateRoleDTO();
@@ -79,6 +81,10 @@ namespace EBlog.IO.Controllers
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError("", result.Errors.First().Description);
                 }
             }
             return View();

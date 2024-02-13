@@ -43,8 +43,15 @@ namespace EBlog.IO.Controllers
             if (ModelState.IsValid)
             {
                 await _articleServices.Create(model);
-                return  RedirectToAction("Index");
+                TempData["ArticleCreateMessage"] = "Success";
             }
+            else
+            {
+                TempData["ArticleCreateMessage"] = "Failed to Create";
+            }
+            
+            var getGenreVMs = await _genreServices.GetAllGenres();
+            model.Genres = getGenreVMs;
             return View(model);
         }
 

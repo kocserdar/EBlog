@@ -38,6 +38,8 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
     .AddDefaultTokenProviders();
 
 builder.Services.AddDistributedMemoryCache();
+
+//Session
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(10);
@@ -86,6 +88,8 @@ app.UseAuthorization();
 //    name: "default",
 //    pattern: "{controller=Home}/{action=Index}/{id?}");
 
+
+//Additional route for ReadbySlug
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(

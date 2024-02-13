@@ -19,11 +19,12 @@ namespace EBlog.IO.Controllers
         private readonly IUnitOfWorks _unitOfWorks;
 
 
-        public HomeController(ILogger<HomeController> logger, UserManager<AppUser> userManager, IHomeServices homeServices)
+        public HomeController(ILogger<HomeController> logger, UserManager<AppUser> userManager, IHomeServices homeServices, IUnitOfWorks unitOfWorks)
         {
             _logger = logger;
             _userManager = userManager;
             _homeServices = homeServices;
+            _unitOfWorks = unitOfWorks;
         }
 
         public async Task<IActionResult> Index(int page = 1, int genreId = 999, int filter = 0)

@@ -26,7 +26,6 @@ namespace EBlog.Service.Services.HomeServices
 
         public async Task<SearchResultVM> Search(string query)
         {
-            await Console.Out.WriteLineAsync("burası servis" + query);
             SearchResultVM searchResultVM = new SearchResultVM();
             searchResultVM.Articles = await _unitOfWorks.ArticleRepo.Search(query);
             searchResultVM.Genres = await _unitOfWorks.GenreRepo.Search(query);
@@ -93,7 +92,7 @@ namespace EBlog.Service.Services.HomeServices
                         join: x => x.Include(x => x.AppUser).Include(x => x.Genre).Include(x => x.Likes).Include(x => x.Comments)
                         );
                         break;
-                    case 2:
+                    case 2: //New
                         articles = await _unitOfWorks.ArticleRepo.GetArticlesListPaged(
                         select: x => new GetArticleVM
                         {
@@ -163,7 +162,7 @@ namespace EBlog.Service.Services.HomeServices
                         join: x => x.Include(x => x.AppUser).Include(x => x.Genre).Include(x => x.Likes).Include(x => x.Comments)
                         );
                         break;
-                    case 2:
+                    case 2: //New
                         articles = await _unitOfWorks.ArticleRepo.GetArticlesListPaged(
                         select: x => new GetArticleVM
                         {
